@@ -1,0 +1,110 @@
+{
+    "email": "Email",
+    "password": "รหัสผ่าน",
+    "confirmpassword": "ยืนยันรหัสผ่าน",
+    "login": "ลงชื่อเข้าใช้" ,
+    "enter":"เข้าสู่ระบบ",
+    "enteradmin":"เข้าสู่ระบบสำหรับแอดมิน",
+    "adminloginpage":"ไปหน้าเข้าสู่ระบบสำหรับแอดมิน",
+    "register": "สมัครสมาชิก",
+    "displayname": "ชื่อที่จะแสดง",
+    "you": "คุณคือใคร",
+    "registerbutton": "สมัครเลย!",
+
+    "searchbyname": "ค้นหาจากชื่อ",
+    "search": "ค้นหา",
+    "topstar": "อันดับที่",
+    "topexpert": "TOP EXPERT",
+    "youfavorite": "ที่คุณถูกใจ",
+    
+
+
+    "adminbutton": "หน้านี้แอดมินเห็นเท่านั้น",
+    "editprofilebutton": "แก้ไขข้อมูลส่วนตัว",
+    "changepasswordbutton": "เปลี่ยนรหัสผ่าน",
+    "logoutbutton": "ออกจากระบบ",
+    "zonebutton": "ข้อมูลโซน",
+
+    "editprofileadmin": "แก้ไขข้อมูลส่วนตัวแอดมิน",
+    "name": "ชื่อ",
+    "save": "บันทึก",
+
+    "oldpassword": "รหัสผ่านเดิม",
+    "newpassword": "รหัสผ่านใหม่",
+    "confirmnewpassword": "ยืนยันรหัสผ่านใหม่",
+    "changepasswordadmin": "เปลี่ยนรหัสผ่านแอดมิน",
+    "savechange": "เปลี่ยนรหัส",
+
+    "zone": "โซน",
+    "add": "เพิ่ม",
+    "data": "ข้อมูล",
+    "edit": "แก้ไข",
+
+    "allexpert": "ผู้เชี่ยวชาญ",
+    "allcustomer": "ลูกค้าทั้งหมด",
+    "age": "อายุ  ",
+    "year": " ปี",
+
+    "admincontroll": "ส่วนควบคุมสำหรับแอดมิน",
+    "expertlogin": "เข้าสู่ระบบผู้เชี่ยวชาญคนนี้",
+    "expertclose": "ปิดใช้งานผู้เชี่ยวชาญคนนี้",
+    "expertcloseauthen": "ปิดใช้งานยืนยันรูปภาพ",
+    "expertclosetop": "ปิดใช้งานเป็น TOP EXPERT",
+    "expertdelete": "ลบผู้เชี่ยวชาญคนนี้",
+    "adminlogout": "ออกจากระบบแอดมิน",
+
+
+    "group":"กลุ่ม",
+    "groupname":"ชื่อกลุ่ม",
+    "creategroup":"สร้างกลุ่ม",
+    "create":"สร้าง",
+    "adminsetting":"หน้าแอดมิน",
+    "aboutus":"เกี่ยวกับเรา metex",
+    "msg_aboutus":"Metex ศูนย์รวมผู้เชี่ยวชาญในการพัฒนาองค์กร ไม่ว่าคุณจะต้องการพบผู้เชี่ยวชาญแบบไหน? เราเชื่อมต่อให้คุณ",
+
+
+    "expertmsg":"คุณต้องการผู้ให้บริการแบบไหน?",
+    "expertmsg2":"คุณต้องการคนปลูกอะไร",
+    "expertmsg3":"เลือกได้มากกว่า 1 อย่าง",
+
+
+
+    "fav":"ถูกใจ",
+    "favorite":"favorite",
+    "myprofile":"โปรไฟล์ของฉัน",
+    "editprofile":"แก้ไขโปรไฟล์",
+    "editpicture":"แก้ไขรูปภาพ",
+    "editemail":"เปลี่ยน Email",
+    "editpassword":"เปลี่ยน รหัสผ่าน",
+    "editagencyprofile":"แก้ไขโปรไฟล์ของฉัน",
+    "editexpertprofile":"แก้ไขโปรไฟล์ผู้เชี่ยวชาญ",
+
+    "oldemail":"Email เดิม",
+    "newemail":"Email ใหม่",
+
+    "selectpicture":"เลือกรูปภาพ",
+
+
+    "lowprice":"ค่าใช้จ่ายขั้นต่ำ",
+    "heightprice":"ค่าใช้จ่ายขั้นต่ำ",
+    "lineid":"LINE ID",
+    "facebook":"Facebook",
+    "phone":"Phone",
+    "about":"เกี่ยวกับ",
+    "skill":"ทำอะไรได้บ้าง",
+
+   
+   
+   
+   
+   
+    "productList":"นับสต๊อคสินค้า"
+
+
+
+
+
+
+
+   
+}
