@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:metex_app/data/data.dart';
 import 'package:metex_app/generated/l10n.dart';
 import 'package:metex_app/models/experts_model.dart';
@@ -101,22 +102,21 @@ class _UserSettingPageState extends State<UserSettingPage> {
   }
 
   toLogout(BuildContext context) async {
-    // var data = {"loginUser": widget.userId};
+    // Create storage
+    final storage = new FlutterSecureStorage();
+var token = await storage.read(key: 'loginUserToken');
+    var data = {"token": token};
     try {
-    //  Uri url = Uri.parse('http://127.0.0.1:3000/api/user/logout'); //url on web
-       Uri url = Uri.parse(Config.BASE_URL+'/api/user/logout'); //url on web
-      var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        // body: convert.jsonEncode(data)
-      );
-       print(response.body);
-
+      //  Uri url = Uri.parse('http://127.0.0.1:3000/api/user/logout'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL + '/api/user/logout'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      print(response.statusCode);
       if (response.statusCode == 200) {
-       
-
+        //print(response.body);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -210,7 +210,6 @@ class _UserSettingPageState extends State<UserSettingPage> {
       ),
     );
   }
-
 
   @override
   void initState() {
@@ -576,7 +575,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                         onTap: () {
                                                           print(
                                                               'You press EditPassword Button');
-                                                           toSendDataEditPasswordPageRoute(context);
+                                                          toSendDataEditPasswordPageRoute(
+                                                              context);
                                                         },
                                                       ),
                                                       Padding(
@@ -954,7 +954,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                               // Navigator.pushNamed(context, '/tabwidget');
                                                               print(
                                                                   'You press EditPassword Button');
-                                                               toSendDataEditPasswordPageRoute(context);
+                                                              toSendDataEditPasswordPageRoute(
+                                                                  context);
                                                             },
                                                           ),
                                                           Padding(
@@ -1014,14 +1015,16 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                               print(
                                                                   'You press Logout Button');
                                                               // Navigator.pushNamed(context, '/tabwidget');
-                                                              Navigator.push(
+
+                                                              /* Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
                                                                           NavBeforeLoginPage(),
                                                                 ),
-                                                              );
+                                                              );*/
+                                                              toLogout(context);
                                                             },
                                                           ),
                                                         ],
@@ -1135,7 +1138,6 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                                   ),
                                                                 ),
                                                                 onTap: () {
-                                                               
                                                                   toCheckEditProfilePageRoute();
                                                                 },
                                                               ),
@@ -1305,7 +1307,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                                 onTap: () {
                                                                   print(
                                                                       'You press EditPassword Button');
-                                                                  toSendDataEditPasswordPageRoute(context);
+                                                                  toSendDataEditPasswordPageRoute(
+                                                                      context);
                                                                 },
                                                               ),
                                                               Padding(
@@ -1640,7 +1643,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                         onTap: () {
                                                           print(
                                                               'You press EditPassword Button');
-                                                           toSendDataEditPasswordPageRoute(context);
+                                                          toSendDataEditPasswordPageRoute(
+                                                              context);
                                                         },
                                                       ),
                                                       Padding(
@@ -1695,13 +1699,14 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                             )),
                                                         onTap: () {
                                                           // Navigator.pushNamed(context, '/tabwidget');
-                                                          Navigator.push(
+                                                          /* Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                               builder: (context) =>
                                                                   NavBeforeLoginPage(),
                                                             ),
-                                                          );
+                                                          );*/
+                                                          toLogout(context);
                                                         },
                                                       ),
                                                     ],
@@ -1950,7 +1955,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                               // Navigator.pushNamed(context, '/tabwidget');
                                                               print(
                                                                   'You press EditPassword Button');
-                                                                toSendDataEditPasswordPageRoute(context);
+                                                              toSendDataEditPasswordPageRoute(
+                                                                  context);
                                                             },
                                                           ),
                                                           Padding(
@@ -2010,14 +2016,15 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                               print(
                                                                   'You press Logout Button');
                                                               // Navigator.pushNamed(context, '/tabwidget');
-                                                              Navigator.push(
+                                                              /* Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
                                                                           NavBeforeLoginPage(),
                                                                 ),
-                                                              );
+                                                              );*/
+                                                              toLogout(context);
                                                             },
                                                           ),
                                                         ],
@@ -2253,7 +2260,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                                 onTap: () {
                                                                   print(
                                                                       'You press EditPassword Button');
-                                                                   toSendDataEditPasswordPageRoute(context);
+                                                                  toSendDataEditPasswordPageRoute(
+                                                                      context);
                                                                 },
                                                               ),
                                                               Padding(

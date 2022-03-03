@@ -724,11 +724,11 @@ class _HomeAdminLoginPageState extends State<HomeAdminLoginPage> {
                             setState(() {});
                           },*/
                           onTap: () {
-                            Navigator.push(
+                           /* Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        ExpertDetailPage()));
+                                        ExpertDetailPage(chooseExpertlist: chooseExpertlist)));*/
                           },
                           child: Container(
                             width: double.infinity,
@@ -758,7 +758,7 @@ class _HomeAdminLoginPageState extends State<HomeAdminLoginPage> {
                                                     Icons.favorite_border_rounded,
                                                     color: Colors.white,
                                                   ),*/
-                                            child: _subCatModle
+                                            /*child: _subCatModle
                                                         .userFavoriteUserId ==
                                                     int.parse(widget.userId)
                                                 ? IconButton(
@@ -781,7 +781,9 @@ class _HomeAdminLoginPageState extends State<HomeAdminLoginPage> {
                                                         .kGreyTextColor,
                                                     // color: ConstantData.redColor,
                                                     onPressed: () {},
-                                                  ),
+                                                  ),*/
+
+
                                           ),
                                         ),
                                         Row(

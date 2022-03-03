@@ -35,7 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "adminsetting": MessageLookupByLibrary.simpleMessage("หน้าแอดมิน"),
         "age": MessageLookupByLibrary.simpleMessage("อายุ  "),
         "allcustomer": MessageLookupByLibrary.simpleMessage("ลูกค้าทั้งหมด"),
-        "allexpert": MessageLookupByLibrary.simpleMessage("ผู้เชี่ยวชาญ"),
+        "allexpert": MessageLookupByLibrary.simpleMessage("ผู้ให้บริการ"),
         "changepasswordadmin":
             MessageLookupByLibrary.simpleMessage("เปลี่ยนรหัสผ่านแอดมิน"),
         "changepasswordbutton":
@@ -85,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "facebook": MessageLookupByLibrary.simpleMessage("Facebook"),
         "fav": MessageLookupByLibrary.simpleMessage("ถูกใจ"),
         "favorite": MessageLookupByLibrary.simpleMessage("favorite"),
+        "gender": MessageLookupByLibrary.simpleMessage("เพศ"),
         "group": MessageLookupByLibrary.simpleMessage("กลุ่ม"),
         "groupname": MessageLookupByLibrary.simpleMessage("ชื่อกลุ่ม"),
         "heightprice":
@@ -103,6 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "oldpassword": MessageLookupByLibrary.simpleMessage("รหัสผ่านเดิม"),
         "password": MessageLookupByLibrary.simpleMessage("รหัสผ่าน"),
         "phone": MessageLookupByLibrary.simpleMessage("Phone"),
+        "picture": MessageLookupByLibrary.simpleMessage("รูปภาพ"),
         "productList": MessageLookupByLibrary.simpleMessage("นับสต๊อคสินค้า"),
         "register": MessageLookupByLibrary.simpleMessage("สมัครสมาชิก"),
         "registerbutton": MessageLookupByLibrary.simpleMessage("สมัครเลย!"),
@@ -114,6 +116,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "skill": MessageLookupByLibrary.simpleMessage("ทำอะไรได้บ้าง"),
         "topexpert": MessageLookupByLibrary.simpleMessage("TOP EXPERT"),
         "topstar": MessageLookupByLibrary.simpleMessage("อันดับที่"),
+        "type": MessageLookupByLibrary.simpleMessage("ประเภท"),
+        "verified": MessageLookupByLibrary.simpleMessage("ผ่านการประเมิน"),
         "year": MessageLookupByLibrary.simpleMessage(" ปี"),
         "you": MessageLookupByLibrary.simpleMessage("คุณคือใคร"),
         "youfavorite": MessageLookupByLibrary.simpleMessage("ที่คุณถูกใจ"),

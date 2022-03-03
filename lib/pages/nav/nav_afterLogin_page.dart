@@ -20,7 +20,8 @@ class NavAfterLoginPage extends StatefulWidget {
       {Key? key,
       required this.userId,
       required this.userName,
-      required this.userType})
+      required this.userType
+      })
       : super(key: key);
   @override
   _NavAfterLoginPageState createState() => _NavAfterLoginPageState();
@@ -33,9 +34,7 @@ class _NavAfterLoginPageState extends State<NavAfterLoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // userLogin = widget.userList;
-    print(widget.userId);
-    print(widget.userType);
+   
   }
   //late  User? userLogin = widget.user;
 
@@ -51,12 +50,7 @@ class _NavAfterLoginPageState extends State<NavAfterLoginPage> {
   }*/
 
   bool isUser() {
-    /*  String user = 'admin';
-    bool result = false;
-    if (user == 'admin') {
-      result = true;
-    }
-    return result;*/
+  
 
     if (widget.userType == 'a' ||
         widget.userType == 'c' ||

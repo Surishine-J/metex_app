@@ -27,27 +27,23 @@ class Data {
   Data({
     required this.session,
     required this.user,
+    required this.token,
   });
   late final Session session;
   late final List<User> user;
+  late final String token;
   
   Data.fromJson(Map<String, dynamic> json){
     session = Session.fromJson(json['session']);
     user = List.from(json['user']).map((e)=>User.fromJson(e)).toList();
-
-    /*if (json['data'] != null) {
-    
-      List<User> data = [];
-      json['data'].forEach((v) {
-        data.add(new User.fromJson(v));
-      });
-    }*/
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['session'] = session.toJson();
     _data['user'] = user.map((e)=>e.toJson()).toList();
+    _data['token'] = token;
     return _data;
   }
 }
@@ -60,7 +56,7 @@ class Session {
   late final Cookie cookie;
   late final int loginUser;
   
-  Session.fromJson(Map<String?, dynamic> json){
+  Session.fromJson(Map<String, dynamic> json){
     cookie = Cookie.fromJson(json['cookie']);
     loginUser = json['loginUser'];
   }

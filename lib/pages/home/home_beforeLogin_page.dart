@@ -1,5 +1,7 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:intl/intl.dart';
 import 'package:metex_app/data/data.dart';
 import 'package:metex_app/generated/l10n.dart';
@@ -63,6 +65,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
   List<ExpertDetails> coachList = [];
   List<ExpertDetails> trainerList = [];
   List<ExpertDetails> consultantList = [];
+  List<ExpertDetails> chooseExpertlist = [];
 
 //  List<SubCategoryModel> subList = [];
   List<ExpertDetails> subList = [];
@@ -105,29 +108,32 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
   }
 
   getDataExpertAll() async {
-   
     /* var data = {
         "user_id": 48,
        
       };*/
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/user/search/all'); //url on web
-      var response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        // body: convert.jsonEncode(data)
-         );
-     // print(data);
+    Uri url =
+        Uri.parse('http://127.0.0.1:3000/api/user/search/all'); //url on web
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      // body: convert.jsonEncode(data)
+    );
+    // print(data);
 
     if (response.statusCode == 200) {
       // print(response.body);
       final SearchAllResponse searchModel =
           SearchAllResponse.fromJson(convert.jsonDecode(response.body));
-
+//var seen = Set<ExpertDetails>();
       setState(() {
         allExpertlist = searchModel.data.expertdetails
             .where((element) => element.userProfileType == 'u')
             .toList();
+        // .where((expertdetails) => seen.add(expertdetails) )
+        // .toList();
         coachList = allExpertlist
             .where((element) => element.userProfileType2 == 1)
             .toList();
@@ -156,6 +162,9 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
       return trainerList;
     }
     if (selectedPos == 3) {
+      return consultantList;
+    }
+    if (selectedPos == 4) {
       return consultantList;
     }
     return null;
@@ -227,9 +236,70 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                 )));
   }
 
+  sendDataToExpertDetailsPage(String user_profile_id) {
+    print('user_profile_id =======>' + user_profile_id);
+    setState(() {
+      chooseExpertlist = allExpertlist
+          .where(
+              (element) => element.userProfileId == int.parse(user_profile_id))
+          .toList();
+
+      print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
+
+      if (chooseExpertlist.length > 0) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    ExpertDetailPage(chooseExpertlist: chooseExpertlist)));
+      }
+    });
+  }
+
+  // Create storage
+  final storage = new FlutterSecureStorage();
+
+  storageReadWrite() async {
+    // Read value
+    String? value2 = await storage.read(key: 'test');
+    if (value2 == null) {
+      await storage.write(key: 'test', value: '0');
+    } else {
+      String value3 = (int.parse(value2) + 1).toString();
+      await storage.write(key: 'test', value: value3);
+    }
+// Read all values
+//Map<String, String> allValues = await storage.readAll();
+
+// Delete value
+//await storage.delete(key: 'test');
+
+// Delete all
+//await storage.deleteAll();
+
+// Write value
+    // await storage.write(key: 'test', value: '0');
+  }
+
+  read() async {
+    // Read value
+    var v = await storage.read(key: 'test');
+    var v2 = await storage.read(key: 'loginUserToken');
+    setState(() {
+      test = v;
+      loginUserToken = v2;
+    });
+  }
+
+  var test;
+  var loginUserToken;
+
   @override
   void initState() {
     super.initState();
+
+    storageReadWrite();
+    read();
 
     getDataZone();
     getDataExpertType();
@@ -432,6 +502,11 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                           },
                         ),
                       ),
+                      /* Center(child: Text('Test ====> ' + test.toString())),
+                      Center(
+                          child: Text('loginUserToken ====> ' +
+                              loginUserToken.toString())),*/
+
                       Center(
                         child: ConstantWidget.getCustomTextWithoutAlign(
                             // "Test",
@@ -463,8 +538,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                         padding: EdgeInsets.symmetric(
                           vertical: cellMargin2,
                           horizontal: cellMargin2 + _crossAxisSpacing2,
-                           // vertical: 50,
-                         // horizontal: 50,
+                          // vertical: 50,
+                          // horizontal: 50,
                         ),
                         crossAxisCount: 5, //_crossAxisCount2,
                         crossAxisSpacing: _crossAxisSpacing2,
@@ -572,8 +647,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                               },
                               child: Container(
                                 width: double.infinity,
-                               // height: 200,
-                                 height: cellHeight2,
+                                // height: 200,
+                                height: cellHeight2,
                                 decoration: BoxDecoration(
                                   color: ConstantData.bgColor,
                                   //lightPrimaryColors,
@@ -943,11 +1018,12 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                             setState(() {});
                           },*/
                               onTap: () {
-                                Navigator.push(
+                                sendDataToExpertDetailsPage(_subCatModle.userProfileId.toString());
+                                /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            ExpertDetailPage()));
+                                            ExpertDetailPage(chooseExpertlist: chooseExpertlist)));*/
                               },
                               child: Container(
                                 width: double.infinity,
@@ -1183,7 +1259,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                   ConstantWidget.getCustomText(
                                                     S.of(context).age +
                                                         // _subCatModle.age.toString() +
-                                                        "อายุ" +
+                                                        "30 " +
                                                         /*calculateAge(_subCatModle
                                                               .userProfileBirthDate
                                                               .toString()) +*/

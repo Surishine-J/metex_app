@@ -10,6 +10,7 @@ import 'package:metex_app/models/experts_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/services/zone_services.dart';
 import 'package:metex_app/utils/utils.dart';
 
@@ -36,6 +37,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
   List<ExpertDetails> consultantList = [];
   List<ExpertDetails> topExpertList = [];
   List<ExpertDetails> favoriteList = [];
+  List<ExpertDetails> chooseExpertlist = [];
 
   late String search = '';
   late int type2 = 0;
@@ -81,7 +83,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
     "Consultant",
   ];
   List<String> selectedFilterList = [];
- List<String> filterList = [
+  List<String> filterList = [
     "ไม้สัก",
     "ไม้ยาง",
     "ไม้พะยุง",
@@ -163,7 +165,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
   }
 
   getDataExpertAll() async {
-    var response = await http.post(
+    /*  var response = await http.post(
       Uri.parse('http://127.0.0.1:3000/api/user/search/all'),
     );
     // print('get expert all' + " " + response.statusCode.toString());
@@ -188,15 +190,62 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
         topExpertList = allExpertlist
             .where((element) => element.userProfileIsTopStar == 1)
             .toList();
-        favoriteList = allExpertlist
-            .where((element) =>
-                element.userFavoriteUserId == int.parse(widget.userId))
+        favoriteList = allExpertlist.where((element) => element.isFavorite ==1)
+            //.where((element) =>
+              //  element.userFavoriteUserId == int.parse(widget.userId))
             .toList();
 
         //print(careerTypeModel.data[0].user_type2_name);
       });
     } else {
       print('Error getDataExpertAll');
+    }*/
+
+    var data = {"user_id": widget.userId};
+    try {
+      //  Uri url = Uri.parse('http://127.0.0.1:3000/api/user/logout'); //url on web
+      Uri url =
+          Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        // print(response.body);
+        final SearchAllResponse searchModel =
+            SearchAllResponse.fromJson(convert.jsonDecode(response.body));
+
+        setState(() {
+          allExpertlist = searchModel.data.expertdetails
+              .where((element) => element.userProfileType == 'u')
+              .toList();
+          coachList = allExpertlist
+              .where((element) => element.userProfileType2 == 1)
+              .toList();
+          trainerList = allExpertlist
+              .where((element) => element.userProfileType2 == 2)
+              .toList();
+          consultantList = allExpertlist
+              .where((element) => element.userProfileType2 == 3)
+              .toList();
+          topExpertList = allExpertlist
+              .where((element) => element.userProfileIsTopStar == 1)
+              .toList();
+          favoriteList = allExpertlist
+              .where((element) => element.isFavorite == 1)
+              //.where((element) =>
+              //  element.userFavoriteUserId == int.parse(widget.userId))
+              .toList();
+
+          //print(careerTypeModel.data[0].user_type2_name);
+        });
+      } else {
+        print('Error getDataExpertAll');
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -251,48 +300,22 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
 
   toCreateFavorite(String userId, String userProfileId) async {
     var data = {
-      "user_favorite_user_id": userId,
-      "user_favorite_user_profile_target_id": userProfileId,
+      "user_id": userId,
+      "user_profile_id": userProfileId,
     };
     try {
       Uri url = Uri.parse(
-          'http://127.0.0.1:3000/api/user/favorite/create'); //url on web
+          'http://localhost:3000/api/user/favorite/create'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: convert.jsonEncode(data));
-      // print(widget.userId);
+      print('data');
+      print(data);
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        print(response.body);
-       // getDataExpertAll();
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ไม่พบผู้ใช้ ')));
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  toDeleteFavorite(String userFavoriteUserId,
-      String userFavoriteUserProfileTargetId, String userFavoriteId) async {
-    var data = {
-      "user_favorite_user_id": userFavoriteUserId,
-      "user_favorite_user_profile_target_id": userFavoriteUserProfileTargetId,
-      "user_favorite_id": userFavoriteId
-    };
-    try {
-      Uri url = Uri.parse(
-          'http://127.0.0.1:3000/api/user/favorite/delete'); //url on web
-      var response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: convert.jsonEncode(data));
-      // print(widget.userId);
-      if (response.statusCode == 200) {
-        print(response.body);
+        // print(response.body);
         getDataExpertAll();
       } else {
         ScaffoldMessenger.of(context)
@@ -303,6 +326,53 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
     }
   }
 
+  toDeleteFavorite(String userId, String user_profile_id) async {
+    var data = {
+      "user_id": userId,
+      "user_profile_id": user_profile_id
+      // "user_favorite_id": userFavoriteId
+    };
+    try {
+      Uri url = Uri.parse(
+          'http://127.0.0.1:3000/api/user/favorite/delete'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      print(data);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        //  print(response.body);
+        getDataExpertAll();
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('ไม่พบผู้ใช้ ')));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  sendDataToExpertDetailsPage(String user_profile_id) {
+    print('user_profile_id =======>' + user_profile_id);
+    setState(() {
+      chooseExpertlist = allExpertlist
+          .where((element) => element.userProfileId == int.parse(user_profile_id))
+          .toList();
+
+      print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
+
+      if (chooseExpertlist.length > 0) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    ExpertDetailPage(chooseExpertlist: chooseExpertlist)));
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -310,7 +380,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
     getDataExpertType();
     getDataExpertAll();
 
-    print(favoriteList.length);
+   
   }
 
   // List<ZoneModel> _categoryList = <ZoneModel>[];
@@ -408,7 +478,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                   ),
                   Container(
                     // color: Colors.red,
-                    height: topSliderHeight*1.25,
+                    height: topSliderHeight * 1.25,
 
                     child: ListView.builder(
                       primary: false,
@@ -425,49 +495,49 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                             });
                           },
                           child: Container(
-                                width: topSliderWidth,
-                                decoration: BoxDecoration(
-                                    image: selectionCareerList[index]
+                            width: topSliderWidth,
+                            decoration: BoxDecoration(
+                                image: selectionCareerList[index]
+                                            .user_type2_id ==
+                                        1
+                                    ? DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/logo/carve.png'),
+                                        fit: BoxFit.cover)
+                                    : selectionCareerList[index]
                                                 .user_type2_id ==
-                                            1
+                                            2
                                         ? DecorationImage(
                                             image: AssetImage(
-                                                'assets/images/logo/carve.png'),
+                                                'assets/images/logo/fruit.png'),
                                             fit: BoxFit.cover)
                                         : selectionCareerList[index]
                                                     .user_type2_id ==
-                                                2
+                                                3
                                             ? DecorationImage(
                                                 image: AssetImage(
-                                                    'assets/images/logo/fruit.png'),
+                                                    'assets/images/logo/hydro.png'),
                                                 fit: BoxFit.cover)
                                             : selectionCareerList[index]
                                                         .user_type2_id ==
-                                                    3
+                                                    4
                                                 ? DecorationImage(
                                                     image: AssetImage(
-                                                        'assets/images/logo/hydro.png'),
+                                                        'assets/images/logo/carbon.png'),
                                                     fit: BoxFit.cover)
-                                                : selectionCareerList[index]
-                                                            .user_type2_id ==
-                                                        4
-                                                    ? DecorationImage(
-                                                        image: AssetImage(
-                                                            'assets/images/logo/carbon.png'),
-                                                        fit: BoxFit.cover)
-                                                    : DecorationImage(
-                                                        image: AssetImage(
-                                                            'assets/images/logo/all.jpg'),
-                                                        fit: BoxFit.cover),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    color: (selectedPos == index)
-                                        ? ConstantData.primaryColor
-                                        : ConstantData.lightPrimaryColors),
-                                margin: EdgeInsets.all(
-                                    ConstantWidget.getPercentSize1(
-                                        topSliderWidth, 5)),
-                                /* child: Align(
+                                                : DecorationImage(
+                                                    image: AssetImage(
+                                                        'assets/images/logo/all.jpg'),
+                                                    fit: BoxFit.cover),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                color: (selectedPos == index)
+                                    ? ConstantData.primaryColor
+                                    : ConstantData.lightPrimaryColors),
+                            margin: EdgeInsets.all(
+                                ConstantWidget.getPercentSize1(
+                                    topSliderWidth, 5)),
+                            /* child: Align(
                                   alignment: Alignment.center,
                                   child: ConstantWidget.getCustomText(
                                       selectionCareerList[index]
@@ -482,20 +552,19 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                       ConstantWidget.getPercentSize1(
                                           topSliderHeight, 25)),
                                 ),*/
-                                child: Align(
-                                  //heightFactor:100 ,
-                                  alignment: Alignment.bottomCenter,
-                                  child:
-                                      ConstantWidget.getCustomTextWithoutAlign(
-                                          selectionCareerList[index]
-                                              .user_type2_name
-                                              .toString(),
-                                          ConstantData.whiteColor,
-                                          FontWeight.w900,
-                                          36.0),
-                                ),
-                              ),
-                            );
+                            child: Align(
+                              //heightFactor:100 ,
+                              alignment: Alignment.bottomCenter,
+                              child: ConstantWidget.getCustomTextWithoutAlign(
+                                  selectionCareerList[index]
+                                      .user_type2_name
+                                      .toString(),
+                                  ConstantData.whiteColor,
+                                  FontWeight.w900,
+                                  36.0),
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -854,6 +923,11 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                   }
                                   setState(() {});
                                 },*/
+
+                          onTap: () {
+                            sendDataToExpertDetailsPage(
+                                _subCatModleTopStar.userProfileId.toString());
+                          },
                           child: Container(
                             width: double.infinity,
                             height: cellHeight2,
@@ -912,38 +986,86 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                             Align(
                                               alignment: Alignment.topRight,
                                               child: Container(
-                                                  padding: EdgeInsets.all(0),
-                                                  decoration: BoxDecoration(
-                                                      color: ConstantData
-                                                          .whiteColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100)),
-                                                  child: _subCatModleTopStar
-                                                              .userFavoriteUserId ==
-                                                          int.parse(
-                                                              widget.userId)
-                                                      ? IconButton(
-                                                          icon: Icon(
-                                                            Icons.favorite,
-                                                          ),
-                                                          iconSize: 20,
-                                                          //  color: ConstantData.kGreyTextColor,
-                                                          color: ConstantData
-                                                              .redColor,
-                                                          onPressed: () {},
-                                                        )
-                                                      : IconButton(
-                                                          icon: Icon(
-                                                            Icons
-                                                                .favorite_border_outlined,
-                                                          ),
-                                                          iconSize: 20,
-                                                          color: ConstantData
-                                                              .kGreyTextColor,
-                                                          // color: ConstantData.redColor,
-                                                          onPressed: () {},
-                                                        )),
+                                                padding: EdgeInsets.all(0),
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        ConstantData.whiteColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100)),
+                                                /* child: _subCatModleTopStar
+                                                            .userFavoriteUserId ==
+                                                        int.parse(widget.userId)
+                                                    ? IconButton(
+                                                        icon: Icon(
+                                                          Icons.favorite,
+                                                        ),
+                                                        iconSize: 20,
+                                                        //  color: ConstantData.kGreyTextColor,
+                                                        color: ConstantData
+                                                            .redColor,
+                                                        onPressed: () {},
+                                                      )
+                                                    : IconButton(
+                                                        icon: Icon(
+                                                          Icons
+                                                              .favorite_border_outlined,
+                                                        ),
+                                                        iconSize: 20,
+                                                        color: ConstantData
+                                                            .kGreyTextColor,
+                                                        // color: ConstantData.redColor,
+                                                        onPressed: () {},
+                                                      ),*/
+                                                child: _subCatModleTopStar
+                                                            .isFavorite ==
+                                                        1
+                                                    ? IconButton(
+                                                        icon: Icon(
+                                                          Icons.favorite,
+                                                        ),
+                                                        iconSize: 20,
+                                                        //  color: ConstantData.kGreyTextColor,
+                                                        color: ConstantData
+                                                            .redColor,
+                                                        onPressed: () {
+                                                          toDeleteFavorite(
+                                                              widget.userId
+                                                                  .toString(),
+                                                              _subCatModleTopStar
+                                                                  .userProfileId
+                                                                  .toString());
+
+                                                          print(
+                                                              'userFavoriteUserId กดไลค์แล้ว  ======> ');
+                                                          print(widget.userId);
+                                                          print(_subCatModleTopStar
+                                                              .userProfileId);
+                                                        },
+                                                      )
+                                                    : IconButton(
+                                                        icon: Icon(
+                                                          Icons
+                                                              .favorite_border_outlined,
+                                                        ),
+                                                        iconSize: 20,
+                                                        color: ConstantData
+                                                            .kGreyTextColor,
+                                                        // color: ConstantData.redColor,
+                                                        onPressed: () {
+                                                          toCreateFavorite(
+                                                              widget.userId,
+                                                              _subCatModleTopStar
+                                                                  .userProfileId
+                                                                  .toString());
+                                                          print(
+                                                              'userFavoriteUserId ยังไม่กดไลค์  ======> ');
+                                                          print(widget.userId);
+                                                          print(_subCatModleTopStar
+                                                              .userProfileId);
+                                                        },
+                                                      ),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -1135,7 +1257,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                           child: ConstantWidget.getCustomText(
                                             S.of(context).age +
                                                 // _subCatModle.age.toString() +
-                                                "อายุ" +
+                                                "30 " +
                                                 S.of(context).year,
                                             // colorOrange,
                                             ConstantData.textColor,
@@ -1283,24 +1405,16 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                   subListFavorite[index];
 
                               return InkWell(
-                                /*onTap: () {
-                            if (selectedFilterList != null &&
-                                selectedFilterList
-                                    .contains(filterList[index])) {
-                              selectedFilterList.remove(filterList[index]);
-                            } else {
-                              selectedFilterList
-                                  .add(filterList[index].toString());
-                              print(selectedFilterList);
-                            }
-                            setState(() {});
-                          },*/
                                 onTap: () {
-                                  Navigator.push(
+                                  /* Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              ExpertDetailPage()));
+                                              ExpertDetailPage(chooseExpertlist: chooseExpertlist)));*/
+
+                                  sendDataToExpertDetailsPage(
+                                      _subCatModleFavorite.userProfileId
+                                          .toString());
                                 },
                                 child: Container(
                                   width: double.infinity,
@@ -1332,7 +1446,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                     Icons.favorite_border_rounded,
                                                     color: Colors.white,
                                                   ),*/
-                                                  child: _subCatModleFavorite
+                                                  /*child: _subCatModleFavorite
                                                               .userFavoriteUserId ==
                                                           int.parse(
                                                               widget.userId)
@@ -1356,6 +1470,57 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                               .kGreyTextColor,
                                                           // color: ConstantData.redColor,
                                                           onPressed: () {},
+                                                        ),*/
+
+                                                  child: _subCatModleFavorite
+                                                              .isFavorite ==
+                                                          1
+                                                      ? IconButton(
+                                                          icon: Icon(
+                                                            Icons.favorite,
+                                                          ),
+                                                          iconSize: 20,
+                                                          //  color: ConstantData.kGreyTextColor,
+                                                          color: ConstantData
+                                                              .redColor,
+                                                          onPressed: () {
+                                                            toDeleteFavorite(
+                                                                widget.userId
+                                                                    .toString(),
+                                                                _subCatModleFavorite
+                                                                    .userProfileId
+                                                                    .toString());
+
+                                                            print(
+                                                                'userFavoriteUserId กดไลค์แล้ว  ======> ');
+                                                            print(
+                                                                widget.userId);
+                                                            print(_subCatModleFavorite
+                                                                .userProfileId);
+                                                          },
+                                                        )
+                                                      : IconButton(
+                                                          icon: Icon(
+                                                            Icons
+                                                                .favorite_border_outlined,
+                                                          ),
+                                                          iconSize: 20,
+                                                          color: ConstantData
+                                                              .kGreyTextColor,
+                                                          // color: ConstantData.redColor,
+                                                          onPressed: () {
+                                                            toCreateFavorite(
+                                                                widget.userId,
+                                                                _subCatModleFavorite
+                                                                    .userProfileId
+                                                                    .toString());
+                                                            print(
+                                                                'userFavoriteUserId ยังไม่กดไลค์  ======> ');
+                                                            print(
+                                                                widget.userId);
+                                                            print(_subCatModleFavorite
+                                                                .userProfileId);
+                                                          },
                                                         ),
                                                 ),
                                               ),
@@ -1563,7 +1728,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                         .getCustomText(
                                                       S.of(context).age +
                                                           // _subCatModle.age.toString() +
-                                                          "อายุ" +
+                                                          "30 " +
                                                           /*calculateAge(_subCatModle
                                                               .userProfileBirthDate
                                                               .toString()) +*/
@@ -1741,7 +1906,9 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        ExpertDetailPage()));
+                                        ExpertDetailPage(
+                                            chooseExpertlist:
+                                                chooseExpertlist)));
                           },
                           child: Container(
                             width: double.infinity,
@@ -1771,7 +1938,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                     Icons.favorite_border_rounded,
                                                     color: Colors.white,
                                                   ),*/
-                                            child: _subCatModle
+                                            /* child: _subCatModle
                                                         .userFavoriteUserId ==
                                                     int.parse(widget.userId)
                                                 ? IconButton(
@@ -1800,6 +1967,53 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                           .userFavoriteUserId);
                                                       print(_subCatModle
                                                           .userFavoriteId);
+                                                    },
+                                                  )
+                                                : IconButton(
+                                                    icon: Icon(
+                                                      Icons
+                                                          .favorite_border_outlined,
+                                                    ),
+                                                    iconSize: 20,
+                                                    color: ConstantData
+                                                        .kGreyTextColor,
+                                                    // color: ConstantData.redColor,
+                                                    onPressed: () {
+                                                      toCreateFavorite(
+                                                          widget.userId,
+                                                          _subCatModle
+                                                              .userProfileId
+                                                              .toString());
+                                                      print(
+                                                          'userFavoriteUserId ยังไม่กดไลค์  ======> ');
+                                                      print(widget.userId);
+                                                      print(_subCatModle
+                                                          .userProfileId);
+                                                    },
+                                                  ),*/
+
+                                            child: _subCatModle.isFavorite == 1
+                                                ? IconButton(
+                                                    icon: Icon(
+                                                      Icons.favorite,
+                                                    ),
+                                                    iconSize: 20,
+                                                    //  color: ConstantData.kGreyTextColor,
+                                                    color:
+                                                        ConstantData.redColor,
+                                                    onPressed: () {
+                                                      toDeleteFavorite(
+                                                          widget.userId
+                                                              .toString(),
+                                                          _subCatModle
+                                                              .userProfileId
+                                                              .toString());
+
+                                                      print(
+                                                          'userFavoriteUserId กดไลค์แล้ว  ======> ');
+                                                      print(widget.userId);
+                                                      print(_subCatModle
+                                                          .userProfileId);
                                                     },
                                                   )
                                                 : IconButton(
@@ -2006,7 +2220,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                               ConstantWidget.getCustomText(
                                                 S.of(context).age +
                                                     // _subCatModle.age.toString() +
-                                                    "อายุ" +
+                                                    "30 " +
                                                     /*calculateAge(_subCatModle
                                                               .userProfileBirthDate
                                                               .toString()) +*/

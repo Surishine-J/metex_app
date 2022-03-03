@@ -30,18 +30,14 @@ class _FavoritePageState extends State<FavoritePage> {
   List<ExpertDetails> allExpertlist = [];
   List<ExpertDetails> favoriteList = [];
   List<ExpertDetails> subListFavorite = [];
+  List<ExpertDetails> chooseExpertlist = [];
 
   Future<bool> _requestPop() {
     Navigator.of(context).pop();
     return new Future.value(false);
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    getMyFavorite();
-  }
+ 
 
   getMyFavorite() async {
     var response = await http.post(
@@ -56,9 +52,10 @@ class _FavoritePageState extends State<FavoritePage> {
       setState(() {
         allExpertlist = searchModel.data.expertdetails;
 
-        favoriteList = allExpertlist
-            .where((element) =>
-                element.userFavoriteUserId == int.parse(widget.userId))
+        favoriteList = allExpertlist.where((element) => element.isFavorite == 1)
+           // .where((element) =>
+              //  element.userFavoriteUserId == int.parse(widget.userId))
+              
             .toList();
 
         //print(careerTypeModel.data[0].user_type2_name);
@@ -68,6 +65,25 @@ class _FavoritePageState extends State<FavoritePage> {
     }
   }
 
+
+ sendDataToExpertDetailsPage(String user_profile_id) {
+    print('user_profile_id =======>' + user_profile_id);
+    setState(() {
+      chooseExpertlist = favoriteList
+          .where((element) => element.userProfileId == int.parse(user_profile_id))
+          .toList();
+
+      print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
+
+      if (chooseExpertlist.length > 0) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    ExpertDetailPage(chooseExpertlist: chooseExpertlist)));
+      }
+    });
+  }
   List<List<ExpertModel>> allCatList = [DataFile.getAllExpertModel()];
 //  List<SubCategoryModel> subList = [];
   List<ExpertModel> subList = [];
@@ -81,6 +97,14 @@ class _FavoritePageState extends State<FavoritePage> {
 
   TextEditingController emailController = new TextEditingController();
 
+
+
+ @override
+  void initState() {
+    super.initState();
+
+    getMyFavorite();
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -429,24 +453,10 @@ class _FavoritePageState extends State<FavoritePage> {
                                   subListFavorite[index];
 
                               return InkWell(
-                                /*onTap: () {
-                            if (selectedFilterList != null &&
-                                selectedFilterList
-                                    .contains(filterList[index])) {
-                              selectedFilterList.remove(filterList[index]);
-                            } else {
-                              selectedFilterList
-                                  .add(filterList[index].toString());
-                              print(selectedFilterList);
-                            }
-                            setState(() {});
-                          },*/
+                            
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              ExpertDetailPage()));
+                                sendDataToExpertDetailsPage(
+                                _subCatModleFavorite.userProfileId.toString());
                                 },
                                 child: Container(
                                   width: double.infinity,
@@ -478,7 +488,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     Icons.favorite_border_rounded,
                                                     color: Colors.white,
                                                   ),*/
-                                                  child: _subCatModleFavorite
+                                                 /* child: _subCatModleFavorite
                                                               .userFavoriteUserId ==
                                                           int.parse(
                                                               widget.userId)
@@ -502,7 +512,53 @@ class _FavoritePageState extends State<FavoritePage> {
                                                               .kGreyTextColor,
                                                           // color: ConstantData.redColor,
                                                           onPressed: () {},
-                                                        ),
+                                                        ),*/
+                                                        child: _subCatModleFavorite
+                                                        .isFavorite == 1
+                                                   
+                                                ? IconButton(
+                                                    icon: Icon(
+                                                      Icons.favorite,
+                                                    ),
+                                                    iconSize: 20,
+                                                    //  color: ConstantData.kGreyTextColor,
+                                                    color:
+                                                        ConstantData.redColor,
+                                                    onPressed: () {
+                                                     /* toDeleteFavorite(
+                                                          _subCatModleTopStar
+                                                              .userProfileUserId
+                                                              .toString(),
+                                                         _subCatModleTopStar.userProfileId.toString()
+                                                         );*/
+
+                                                      print(
+                                                          'userFavoriteUserId กดไลค์แล้ว  ======> ');
+                                                    
+                                                    },
+                                                  )
+                                                : IconButton(
+                                                    icon: Icon(
+                                                      Icons
+                                                          .favorite_border_outlined,
+                                                    ),
+                                                    iconSize: 20,
+                                                    color: ConstantData
+                                                        .kGreyTextColor,
+                                                    // color: ConstantData.redColor,
+                                                    onPressed: () {
+                                                      /*toCreateFavorite(
+                                                          widget.userId,
+                                                          _subCatModleTopStar
+                                                              .userProfileId
+                                                              .toString());*/
+                                                      print(
+                                                          'userFavoriteUserId ยังไม่กดไลค์  ======> ');
+                                                      print(widget.userId);
+                                                     /* print(_subCatModleTopStar
+                                                          .userProfileId);*/
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                               Row(

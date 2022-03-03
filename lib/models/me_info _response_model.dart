@@ -6,12 +6,12 @@ class MeInfoResponseModel {
   });
   late final String message;
   late final Null err;
-  late final Data data;
+  late final Token data;
   
   MeInfoResponseModel.fromJson(Map<String, dynamic> json){
     message = json['message'];
     err = null;
-    data = Data.fromJson(json['data']);
+    data = Token.fromJson(json['data']);
   }
 
   Map<String, dynamic> toJson() {
@@ -23,23 +23,19 @@ class MeInfoResponseModel {
   }
 }
 
-class Data {
-  Data({
+class Token {
+  Token({
     required this.loginUser,
-    required this.loginUserProfileArr,
   });
   late final LoginUser loginUser;
-  late final List<dynamic> loginUserProfileArr;
   
-  Data.fromJson(Map<String, dynamic> json){
+  Token.fromJson(Map<String, dynamic> json){
     loginUser = LoginUser.fromJson(json['loginUser']);
-    loginUserProfileArr = List.castFrom<dynamic, dynamic>(json['loginUserProfileArr']);
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['loginUser'] = loginUser.toJson();
-    _data['loginUserProfileArr'] = loginUserProfileArr;
     return _data;
   }
 }

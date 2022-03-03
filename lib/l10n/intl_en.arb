@@ -16,6 +16,8 @@
     "topstar": "อันดับที่",
     "topexpert": "TOP EXPERT",
     "youfavorite": "ที่คุณถูกใจ",
+    "picture": "รูปภาพ",
+    "verified": "ผ่านการประเมิน",
     
 
 
@@ -40,7 +42,7 @@
     "data": "ข้อมูล",
     "edit": "แก้ไข",
 
-    "allexpert": "ผู้เชี่ยวชาญ",
+    "allexpert": "ผู้ให้บริการ",
     "allcustomer": "ลูกค้าทั้งหมด",
     "age": "อายุ  ",
     "year": " ปี",
@@ -92,6 +94,10 @@
     "phone":"Phone",
     "about":"เกี่ยวกับ",
     "skill":"ทำอะไรได้บ้าง",
+
+    "type":"ประเภท",
+    "gender":"เพศ",
+   
 
    
    

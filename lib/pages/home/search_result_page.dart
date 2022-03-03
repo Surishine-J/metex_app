@@ -447,11 +447,11 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             setState(() {});
                           },*/
                                 onTap: () {
-                                  Navigator.push(
+                                 /* Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              ExpertDetailPage()));
+                                              ExpertDetailPage()));*/
                                 },
                                 child: Container(
                                   width: double.infinity,

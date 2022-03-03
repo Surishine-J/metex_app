@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:metex_app/generated/intl/messages_en.dart';
 import 'package:metex_app/generated/l10n.dart';
@@ -50,6 +51,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
 
   isUserLogin(BuildContext context) async {
     try {
+      final storage = new FlutterSecureStorage();
       var data = {
         "user_id": emailController.text,
         "user_password": passwordController.text,
@@ -57,15 +59,16 @@ class _UserLoginPageState extends State<UserLoginPage> {
       };
       //  Uri url = Uri.parse('http://localhost:3000/api/user/login'); //url on web
       String url = 'http://localhost:3000/api/user/login'; //url on web
-      var response = await MySession.post(url,
-         
-         convert.jsonEncode(data));
+      var response = await MySession.post(url, convert.jsonEncode(data));
       // print(data);
 
       if (response.statusCode == 200) {
-        print("Login OK ====>" + response.body);
+        // print("Login OK ====>" + response.body);
+        var jsondata = convert.jsonDecode(response.body);
+        print(jsondata);
         final LoginModel userloginModel =
             LoginModel.fromJson(convert.jsonDecode(response.body));
+        await storage.write(key: 'loginUserToken', value: userloginModel.data.token);
 
         setState(() {
           //userList = loginModel.data.user;
@@ -73,19 +76,16 @@ class _UserLoginPageState extends State<UserLoginPage> {
           userName = userloginModel.data.user[0].userUserId.toString();
           userType = userloginModel.data.user[0].userType.toString();
         });
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (BuildContext context) => NavAfterLoginPage(
-        //               userId: userId,
-        //               userName: userName,
-        //               userType: userType,
-        //             )));
-
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => UserLoginPage()));
+                builder: (BuildContext context) => NavAfterLoginPage(
+                      userId: userId,
+                      userName: userName,
+                      userType: userType,
+                    )));
+
+       
       } else {
         print("Login NOT OK ====>" + response.body);
         ScaffoldMessenger.of(context)

@@ -210,6 +210,26 @@ class S {
     );
   }
 
+  /// `รูปภาพ`
+  String get picture {
+    return Intl.message(
+      'รูปภาพ',
+      name: 'picture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ผ่านการประเมิน`
+  String get verified {
+    return Intl.message(
+      'ผ่านการประเมิน',
+      name: 'verified',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `หน้านี้แอดมินเห็นเท่านั้น`
   String get adminbutton {
     return Intl.message(
@@ -380,10 +400,10 @@ class S {
     );
   }
 
-  /// `ผู้เชี่ยวชาญ`
+  /// `ผู้ให้บริการ`
   String get allexpert {
     return Intl.message(
-      'ผู้เชี่ยวชาญ',
+      'ผู้ให้บริการ',
       name: 'allexpert',
       desc: '',
       args: [],
@@ -775,6 +795,26 @@ class S {
     return Intl.message(
       'ทำอะไรได้บ้าง',
       name: 'skill',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ประเภท`
+  String get type {
+    return Intl.message(
+      'ประเภท',
+      name: 'type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `เพศ`
+  String get gender {
+    return Intl.message(
+      'เพศ',
+      name: 'gender',
       desc: '',
       args: [],
     );

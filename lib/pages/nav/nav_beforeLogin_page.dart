@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:metex_app/models/me_info%20_response_model.dart';
 import 'package:metex_app/pages/about/about_page.dart';
 import 'package:metex_app/pages/group/group_afterLogin_page.dart';
 import 'package:metex_app/pages/group/group_beforeLogin_page.dart';
@@ -9,7 +11,10 @@ import 'package:metex_app/pages/nav/test2.dart';
 
 import 'package:metex_app/pages/pages.dart';
 import 'package:metex_app/pages/register/register_page.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class NavBeforeLoginPage extends StatefulWidget {
   @override
@@ -20,41 +25,66 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollViewController;
-/*toCheckLoginData() async {
-    var data = {"user_id": widget.userId};
+  late LoginUser userlogin;
+
+  final storage = new FlutterSecureStorage();
+  var loginUserToken;
+
+  toCheckLoginData() async {
+    // Create storage
+    loginUserToken = await storage.read(key: 'loginUserToken');
+    if (loginUserToken != null) {
+      getMeInfo(loginUserToken);
+    }
+   
+  }
+
+  getMeInfo(String loginUserToken) async {
+    var data = {"token": loginUserToken};
     try {
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/user/user'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL + '/api/me/info'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: convert.jsonEncode(data));
-      // print(widget.userId);
+      
+
       if (response.statusCode == 200) {
-        //print(response.body);
-        final UserResponseModel user =
-            UserResponseModel.fromJson(convert.jsonDecode(response.body));
+        print(response.body);
+        final MeInfoResponseModel meinfo =
+            MeInfoResponseModel.fromJson(convert.jsonDecode(response.body));
         setState(() {
-          userList = user.data;
+          userlogin = meinfo.data.loginUser;
+          //print(location);
         });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavAfterLoginPage(
+                userId: userlogin.userId.toString(),
+                userName: userlogin.userName,
+                userType: userlogin.userType),
+          ),
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ไม่พบผู้ใช้ ')));
+       /* ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Logout ไปแล้ว')));*/
       }
     } catch (e) {
       print(e.toString());
     }
-  }*/
-
-
+  }
 
   @override
   void initState() {
     super.initState();
-   _tabController = TabController(vsync: this, length: 5);
-   _scrollViewController = ScrollController(initialScrollOffset: 0.0);
+    toCheckLoginData();
+   
+    _tabController = TabController(vsync: this, length: 5);
+    _scrollViewController = ScrollController(initialScrollOffset: 0.0);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +104,7 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
             preferredSize: Size(screenSize.width, 100.0),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              height: 70 ,
+              height: 70,
               decoration: BoxDecoration(
                 // color: Colors.green,
                 color: ConstantData.primaryColor,
@@ -88,64 +118,56 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
                 ],
               ),
               child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          // color: Colors.red,
-                          margin: EdgeInsets.only(right: 20),//20
-                          child: Image.asset(
-                            ConstantData.assetsImagePath + "logo/200-3.png",
-                            height: 50,
-                          ),
-                        ),
-                        //),
-                        Container(
-                         // color: Colors.red,
-                          height: double.infinity,
-                          // height: 90,
-                          width: 700,
-                          child: TabBar(
-                            indicatorColor: ConstantData.whiteColor,
-                            indicatorWeight: 3.0,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    // color: Colors.red,
+                    margin: EdgeInsets.only(right: 20), //20
+                    child: Image.asset(
+                      ConstantData.assetsImagePath + "logo/200-3.png",
+                      height: 50,
+                    ),
+                  ),
+                  //),
+                  Container(
+                    // color: Colors.red,
+                    height: double.infinity,
+                    // height: 90,
+                    width: 700,
+                    child: TabBar(
+                      indicatorColor: ConstantData.whiteColor,
+                      indicatorWeight: 3.0,
 
-                            tabs: [
-                              Tab(
-                                  icon: Icon(Icons.search, size: 24),
-                                  text: "ค้นหา"),
-                              Tab(
-                                  icon: Icon(Icons.group, size: 24),
-                                  text: "กลุ่ม"),
-                              Tab(
-                                  icon: Icon(Icons.info, size: 24),
-                                  text: "ข้อมูล"),
-                              Tab(
-                                  icon: Icon(Icons.login, size: 24),
-                                  text: "เข้าสู่ระบบ"),
-                              Tab(
-                                  icon:
-                                      Icon(Icons.check_box_outlined, size: 24),
-                                  text: "สมัครสมาชิก"),
-                              /*Tab(
+                      tabs: [
+                        Tab(icon: Icon(Icons.search, size: 24), text: "ค้นหา"),
+                        Tab(icon: Icon(Icons.group, size: 24), text: "กลุ่ม"),
+                        Tab(icon: Icon(Icons.info, size: 24), text: "ข้อมูล"),
+                        Tab(
+                            icon: Icon(Icons.login, size: 24),
+                            text: "เข้าสู่ระบบ"),
+                        Tab(
+                            icon: Icon(Icons.check_box_outlined, size: 24),
+                            text: "สมัครสมาชิก"),
+                        /*Tab(
                               icon: Icon(Icons.settings, size: 24),
                               text: "หน้าแอดมิน"),*/
-                            ],
+                      ],
 
-                             /*labelStyle: TextStyle(
+                      /*labelStyle: TextStyle(
                                 color: ConstantData.whiteColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: ConstantData.font15Px,
                                 fontFamily: ConstantData.fontFamily),*/
 
-                            // unselectedLabelStyle: TextStyle(
-                            //     color: ConstantData.whiteColor,
-                            //     fontWeight: FontWeight.w700,
-                            //     fontSize: ConstantData.font15Px,
-                            //     fontFamily: ConstantData.fontFamily),
-                          ),
-                        ),
-                      ],
+                      // unselectedLabelStyle: TextStyle(
+                      //     color: ConstantData.whiteColor,
+                      //     fontWeight: FontWeight.w700,
+                      //     fontSize: ConstantData.font15Px,
+                      //     fontFamily: ConstantData.fontFamily),
                     ),
-                  
+                  ),
+                ],
+              ),
             ),
           ),
           /* body: IndexedStack(
@@ -164,6 +186,7 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
               // AdminSettingPage2()
             ],
           ),
+          
         ),
       ),
     );

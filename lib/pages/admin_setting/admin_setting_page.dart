@@ -63,7 +63,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     }
   }
 
- getDataAdmin() async {
+  getDataAdmin() async {
     var response = await http.post(
       Uri.parse('http://127.0.0.1:3000/api/admin/login'),
     );
@@ -74,6 +74,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
           SearchAllResponse.fromJson(convert.jsonDecode(response.body));
 
       setState(() {
+        //allExpertlist = searchModel.data.expertdetails;
         allExpertlist = searchModel.data.expertdetails;
       });
     } else {
@@ -619,11 +620,11 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                             setState(() {});
                           },*/
                           onTap: () {
-                            Navigator.push(
+                           /* Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        ExpertDetailPage()));
+                                        ExpertDetailPage()));*/
                           },
                           child: Container(
                             width: double.infinity,
@@ -1208,11 +1209,11 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                             setState(() {});
                           },*/
                           onTap: () {
-                            Navigator.push(
+                           /* Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        ExpertDetailPage()));
+                                        ExpertDetailPage()));*/
                           },
                           child: Container(
                             width: double.infinity,
