@@ -1902,13 +1902,15 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                             setState(() {});
                           },*/
                           onTap: () {
-                            Navigator.push(
+                           /* Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         ExpertDetailPage(
                                             chooseExpertlist:
-                                                chooseExpertlist)));
+                                                chooseExpertlist)));*/
+                                                 sendDataToExpertDetailsPage(
+                                _subCatModle.userProfileId.toString());
                           },
                           child: Container(
                             width: double.infinity,
