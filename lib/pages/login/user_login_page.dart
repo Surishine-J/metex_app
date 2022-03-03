@@ -7,6 +7,7 @@ import 'package:metex_app/models/adminlogin_response_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/pages/login/admin_login_page.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/services/session.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
@@ -58,7 +59,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
         "rme": _boolToInt(_value).toString(),
       };
       //  Uri url = Uri.parse('http://localhost:3000/api/user/login'); //url on web
-      String url = 'http://localhost:3000/api/user/login'; //url on web
+      String url = Config.BASE_URL +'/api/user/login'; //url on web
       var response = await MySession.post(url, convert.jsonEncode(data));
       // print(data);
 

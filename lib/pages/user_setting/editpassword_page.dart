@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:metex_app/generated/l10n.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -50,7 +51,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
        "user_password_new": newPasswordController.text
     };
     try {
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/user/rename-password'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL +'/api/user/rename-password'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

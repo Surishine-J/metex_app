@@ -8,6 +8,7 @@ import 'package:metex_app/models/experts_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -47,7 +48,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
   ];
   getDataExpertAll() async {
     var response = await http.post(
-      Uri.parse('http://127.0.0.1:3000/api/user/search/all'),
+      Uri.parse(Config.BASE_URL +'/api/user/search/all'),
     );
     // print('get expert all' + " " + response.statusCode.toString());
     if (response.statusCode == 200) {
@@ -65,7 +66,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
 
   getDataAdmin() async {
     var response = await http.post(
-      Uri.parse('http://127.0.0.1:3000/api/admin/login'),
+      Uri.parse(Config.BASE_URL +'/api/admin/login'),
     );
     // print('get expert all' + " " + response.statusCode.toString());
     if (response.statusCode == 200) {

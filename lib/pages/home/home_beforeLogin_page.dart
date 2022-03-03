@@ -11,6 +11,7 @@ import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/services/zone_services.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -72,7 +73,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
 
   getDataZone() async {
     var response = await http.get(
-      Uri.parse('http://127.0.0.1:3000/api/zone/all'),
+      Uri.parse(Config.BASE_URL + '/api/zone/all'),
     );
     if (response.statusCode == 200) {
       final ZoneModel zoneModel =
@@ -90,7 +91,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
 
   getDataExpertType() async {
     var response = await http.get(
-      Uri.parse('http://127.0.0.1:3000/api/user/usertype2/all'),
+      Uri.parse(Config.BASE_URL + '/api/user/usertype2/all'),
     );
     if (response.statusCode == 200) {
       final CareerTypeModel careerTypeModel =
@@ -113,7 +114,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
        
       };*/
     Uri url =
-        Uri.parse('http://127.0.0.1:3000/api/user/search/all'); //url on web
+        Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
     var response = await http.post(
       url,
       headers: <String, String>{

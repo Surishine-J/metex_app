@@ -52,7 +52,7 @@ class _UserSettingPageState extends State<UserSettingPage> {
   toGetUserData() async {
     var data = {"user_id": widget.userId};
     try {
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/user/user'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL +'/api/user/user'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -79,7 +79,7 @@ class _UserSettingPageState extends State<UserSettingPage> {
     var data = {"user_id": widget.userId};
     try {
       Uri url =
-          Uri.parse('http://127.0.0.1:3000/api/user/userprofile'); //url on web
+          Uri.parse(Config.BASE_URL +'/api/user/userprofile'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

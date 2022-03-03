@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:metex_app/generated/l10n.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -41,7 +42,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
   }).toList();
   getDataZone() async {
     var response = await http.get(
-      Uri.parse('http://127.0.0.1:3000/api/zone/all'),
+      Uri.parse(Config.BASE_URL +'/api/zone/all'),
     );
     if (response.statusCode == 200) {
       final ZoneModel zoneModel =

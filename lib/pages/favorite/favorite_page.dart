@@ -6,6 +6,7 @@ import 'package:metex_app/models/favorite_response.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -41,7 +42,7 @@ class _FavoritePageState extends State<FavoritePage> {
 
   getMyFavorite() async {
     var response = await http.post(
-      Uri.parse('http://127.0.0.1:3000/api/user/search/all'),
+      Uri.parse(Config.BASE_URL +'/api/user/search/all'),
     );
     // print('get expert all' + " " + response.statusCode.toString());
     if (response.statusCode == 200) {

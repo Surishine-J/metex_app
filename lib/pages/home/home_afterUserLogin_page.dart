@@ -132,7 +132,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
 
   getDataZone() async {
     var response = await http.get(
-      Uri.parse('http://127.0.0.1:3000/api/zone/all'),
+      Uri.parse(Config.BASE_URL + '/api/zone/all'),
     );
     if (response.statusCode == 200) {
       final ZoneModel zoneModel =

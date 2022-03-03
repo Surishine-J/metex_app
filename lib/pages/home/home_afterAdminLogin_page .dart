@@ -10,6 +10,7 @@ import 'package:metex_app/models/experts_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/services/zone_services.dart';
 import 'package:metex_app/utils/utils.dart';
 
@@ -114,7 +115,7 @@ class _HomeAdminLoginPageState extends State<HomeAdminLoginPage> {
 
   getDataZone() async {
     var response = await http.get(
-      Uri.parse('http://127.0.0.1:3000/api/zone/all'),
+      Uri.parse(Config.BASE_URL +'/api/zone/all'),
     );
     if (response.statusCode == 200) {
       final ZoneModel zoneModel =

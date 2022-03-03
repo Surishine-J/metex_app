@@ -5,6 +5,7 @@ import 'package:metex_app/models/experts_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -74,7 +75,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
       "can_unn_unn": widget.can_unn_unn,
       "zone_id": widget.zone_id
     };
-    Uri url = Uri.parse('http://127.0.0.1:3000/api/user/search/all');
+    Uri url = Uri.parse(Config.BASE_URL +'/api/user/search/all');
     var response = await http.post(
       url,
       headers: <String, String>{

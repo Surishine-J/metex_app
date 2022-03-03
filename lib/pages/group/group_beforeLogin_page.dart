@@ -6,6 +6,7 @@ import 'package:metex_app/models/group_model.dart';
 import 'package:metex_app/models/me_info%20_response_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -37,7 +38,7 @@ class _GroupBeforeLoginPageState extends State<GroupBeforeLoginPage> {
   toCheckLogin() async {
     // var data = {"loginUser": widget.userId};
     try {
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/me/info'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL +'/api/me/info'); //url on web
       var response = await http.post(
         url,
         headers: <String, String>{

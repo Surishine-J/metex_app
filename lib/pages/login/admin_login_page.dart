@@ -4,6 +4,7 @@ import 'package:metex_app/generated/l10n.dart';
 import 'package:metex_app/models/adminlogin_response_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -55,7 +56,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         "user_password": passwordController.text,
         "rme": _boolToInt(_value).toString(),
       };
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/admin/login'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL +'/api/admin/login'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

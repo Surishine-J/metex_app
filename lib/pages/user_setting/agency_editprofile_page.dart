@@ -4,6 +4,7 @@ import 'package:metex_app/generated/l10n.dart';
 import 'package:metex_app/models/user_response_model.dart';
 import 'package:metex_app/models/userprofile_response.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -53,7 +54,7 @@ class _AgencyEditProfilePageState extends State<AgencyEditProfilePage> {
       "user_name": dispalyNameController.text
     };
     try {
-      Uri url = Uri.parse('http://127.0.0.1:3000/api/user/rename-agency'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL +'/api/user/rename-agency'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
