@@ -109,10 +109,10 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
   }
 
   getDataExpertAll() async {
-    /* var data = {
-        "user_id": 48,
+     var data = {
+        "user_id": null,
        
-      };*/
+      };
     Uri url =
         Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
     var response = await http.post(
@@ -651,8 +651,13 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                 // height: 200,
                                 height: cellHeight2,
                                 decoration: BoxDecoration(
-                                  color: ConstantData.bgColor,
-                                  //lightPrimaryColors,
+                                 // color: ConstantData.bgColor,
+                                color: (selectedFilterList != null &&
+                                              selectedFilterList
+                                                  .contains(filterList[index]))
+                                          ? ConstantData
+                                              .primaryColor //accentColors
+                                          : ConstantData.bgColor,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(7)),
                                   border: Border.all(
@@ -674,7 +679,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                               selectedFilterList
                                                   .contains(filterList[index]))
                                           ? ConstantData
-                                              .primaryColor //accentColors
+                                              .whiteColor //accentColors
                                           : ConstantData.kGreyTextColor,
                                       1,
                                       TextAlign.center,

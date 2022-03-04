@@ -505,15 +505,20 @@ class _HomeAdminLoginPageState extends State<HomeAdminLoginPage> {
                             width: double.infinity,
                             height: cellHeight2,
                             decoration: BoxDecoration(
-                              color: ConstantData.bgColor,
-                              //lightPrimaryColors,
+                             // color: ConstantData.bgColor,
+                               color: (selectedFilterList != null &&
+                                              selectedFilterList
+                                                  .contains(filterList[index]))
+                                          ? ConstantData
+                                              .primaryColor //accentColors
+                                          : ConstantData.bgColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(7)),
                               border: Border.all(
                                   color: (selectedFilterList != null &&
                                           selectedFilterList
                                               .contains(filterList[index]))
-                                      ? ConstantData.primaryColor //accentColors
+                                      ? ConstantData.whiteColor //accentColors
                                       : ConstantData
                                           .kGreyTextColor, //Colors.transparent,
                                   width: 1),

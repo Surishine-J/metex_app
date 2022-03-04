@@ -11,8 +11,7 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class SearchResultPage extends StatefulWidget {
-  
-  late String search ;
+  late String search;
   late int type2 = 0;
   late int can_team_building = 0;
   late int can_leadership = 0;
@@ -56,34 +55,74 @@ class _SearchResultPageState extends State<SearchResultPage> {
     "Consultant",
   ];
   List<ExpertDetails> allExpertlist = [];
-   List<ExpertDetails> filtterExpertlist = [];
+  List<ExpertDetails> filtterExpertlist = [];
+  List<ExpertDetails> chooseExpertlist = [];
 
-  //List<ExpertDetails> coachList = [];
-  //List<ExpertDetails> trainerList = [];
-  //List<ExpertDetails> consultantList = [];
+  var search;
+  var type2;
+  var can_team_building;
+  var can_leadership;
+  var can_communication;
+  var can_performance_management;
+  var can_career_growth;
+  var can_mind_set;
+  var can_unn_unn;
+  var zone_id;
+
+  checkFiltterSelect() {
+    if (widget.search == '') {
+      search = null;
+    }
+    if (widget.type2 == 0) {
+      type2 == null;
+    }
+    if (widget.can_team_building == 0) {
+      can_team_building == null;
+    }
+    if (widget.can_leadership == 0) {
+      can_leadership == null;
+    }
+    if (widget.can_communication == 0) {
+      can_communication == null;
+    }
+    if (widget.can_performance_management == 0) {
+      can_performance_management == null;
+    }
+    if (widget.can_career_growth == 0) {
+      can_career_growth == null;
+    }
+    if (widget.can_mind_set == 0) {
+      can_mind_set == null;
+    }
+    if (widget.can_unn_unn == 0) {
+      can_unn_unn == null;
+    }
+    if (widget.zone_id == 0) {
+      zone_id == null;
+    }
+  }
 
   getDataExpertAll() async {
     var data = {
-      "search": widget.search,
-      "type2": widget.type2,
-      "can_team_building": widget.can_team_building,
-      "can_leadership": widget.can_leadership,
-      "can_communication": widget.can_communication,
-      "can_performance_management": widget.can_performance_management,
-      "can_career_growth": widget.can_career_growth,
-      "can_mind_set": widget.can_mind_set,
-      "can_unn_unn": widget.can_unn_unn,
-      "zone_id": widget.zone_id
+      "user_id": null,
+      "search": search,
+      "type2": type2,
+      "can_team_building": can_team_building,
+      "can_leadership": can_leadership,
+      "can_communication": can_communication,
+      "can_performance_management": can_performance_management,
+      "can_career_growth": can_career_growth,
+      "can_mind_set": can_mind_set,
+      "can_unn_unn": can_unn_unn,
+      "zone_id": zone_id
     };
-    Uri url = Uri.parse(Config.BASE_URL +'/api/user/search/all');
-    var response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-       body: convert.jsonEncode(data)
-    );
-     print(data);
+    Uri url = Uri.parse(Config.BASE_URL + '/api/user/search/all');
+    var response = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: convert.jsonEncode(data));
+    print(data);
     // print('get expert all' + " " + response.statusCode.toString());
     if (response.statusCode == 200) {
       // print(response.body);
@@ -91,7 +130,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
           SearchAllResponse.fromJson(convert.jsonDecode(response.body));
 
       setState(() {
-        allExpertlist = searchModel.data.expertdetails.toList();
+        allExpertlist = searchModel.data.expertdetails
+            .where((element) => element.userProfileType == 'u')
+            .toList();
         /*if(){
 
         }*/
@@ -113,6 +154,26 @@ class _SearchResultPageState extends State<SearchResultPage> {
     }
   }
 
+  sendDataToExpertDetailsPage(String user_profile_id) {
+    print('user_profile_id =======>' + user_profile_id);
+    setState(() {
+      chooseExpertlist = allExpertlist
+          .where(
+              (element) => element.userProfileId == int.parse(user_profile_id))
+          .toList();
+
+      print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
+
+      if (chooseExpertlist.length > 0) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    ExpertDetailPage(chooseExpertlist: chooseExpertlist)));
+      }
+    });
+  }
+
   int selectedPos = 0;
 
   // TextEditingController emailController = new TextEditingController();
@@ -120,6 +181,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   @override
   void initState() {
     super.initState();
+    checkFiltterSelect();
     getDataExpertAll();
   }
 
@@ -435,24 +497,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                       */
 
                               return InkWell(
-                                /*onTap: () {
-                            if (selectedFilterList != null &&
-                                selectedFilterList
-                                    .contains(filterList[index])) {
-                              selectedFilterList.remove(filterList[index]);
-                            } else {
-                              selectedFilterList
-                                  .add(filterList[index].toString());
-                              print(selectedFilterList);
-                            }
-                            setState(() {});
-                          },*/
                                 onTap: () {
-                                 /* Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              ExpertDetailPage()));*/
+                                  sendDataToExpertDetailsPage(
+                                      _subCatModle.userProfileId.toString());
                                 },
                                 child: Container(
                                   width: double.infinity,
@@ -700,16 +747,10 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                         .getCustomText(
                                                       S.of(context).age +
                                                           // _subCatModle.age.toString() +
-                                                          "อายุ" +
-                                                          // _subCatModle.userProfileBirthDate.toString()+
-                                                          /*  _subCatModle
-                                                                      .userProfileBirthDate
-                                                                      .toString() !=
-                                                              'null'
-                                                          ? calAge(_subCatModle
+                                                          "30 " +
+                                                          /*calculateAge(_subCatModle
                                                               .userProfileBirthDate
-                                                              .toString())
-                                                          : " - " +*/
+                                                              .toString()) +*/
                                                           S.of(context).year,
                                                       // colorOrange,
                                                       ConstantData.textColor,
@@ -757,32 +798,38 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                               mainCatHeight, 8),
                                                     ),
                                                     ConstantWidget.getSpace1(),
-                                                    ConstantWidget
-                                                        .getCustomText(
-                                                            // _subCatModle.reviewDesc,
-                                                            "รีวิวสักอย่าง",
-                                                            /* convertToDouble(_subCatModle
-                                                            .userProfileStarRate),*/
-
-                                                            // ( _subCatModle.userProfileStarRate.toDouble()).toString(),
-                                                            // (double.parse(_subCatModle.userProfileStarRate.toString())).toString(),
-                                                            ConstantData
-                                                                .textColor,
-                                                            1,
-                                                            TextAlign.center,
-                                                            FontWeight.w100,
-                                                            ConstantWidget
-                                                                .getPercentSize(
-                                                                    bottomRemainSize,
-                                                                    9)),
+                                                    ConstantWidget.getCustomText(
+                                                        "( " +
+                                                            _subCatModle
+                                                                .userProfileStarRate
+                                                                .toString() +
+                                                            " )",
+                                                        ConstantData.textColor,
+                                                        1,
+                                                        TextAlign.center,
+                                                        FontWeight.w100,
+                                                        ConstantWidget
+                                                            .getPercentSize(
+                                                                bottomRemainSize,
+                                                                9)),
                                                     Icon(
                                                       Icons.star,
-                                                      color: Colors.amber,
+                                                      color: _subCatModle
+                                                                  .userProfileStarRate >
+                                                              0
+                                                          ? Colors.amber
+                                                          : ConstantData
+                                                              .kGreyTextColor,
                                                       size: 16,
                                                     ),
                                                     Icon(
                                                       Icons.check_circle,
-                                                      color: Colors.green,
+                                                      color: _subCatModle
+                                                                  .userProfileIsConfirmImage ==
+                                                              1
+                                                          ? Colors.green
+                                                          : ConstantData
+                                                              .kGreyTextColor,
                                                       size: 16,
                                                     ),
                                                   ],

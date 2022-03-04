@@ -148,7 +148,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
 
   getDataExpertType() async {
     var response = await http.get(
-      Uri.parse('http://localhost:3000/api/user/usertype2/all'),
+      Uri.parse(Config.BASE_URL +'/api/user/usertype2/all'),
     );
     if (response.statusCode == 200) {
       final CareerTypeModel careerTypeModel =
@@ -706,8 +706,13 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                             width: double.infinity,
                             height: cellHeight2,
                             decoration: BoxDecoration(
-                              color: ConstantData.bgColor,
-                              //lightPrimaryColors,
+                             // color: ConstantData.bgColor,
+                              color: (selectedFilterList != null &&
+                                              selectedFilterList
+                                                  .contains(filterList[index]))
+                                          ? ConstantData
+                                              .primaryColor //accentColors
+                                          : ConstantData.bgColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(7)),
                               border: Border.all(
@@ -727,7 +732,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                   (selectedFilterList != null &&
                                           selectedFilterList
                                               .contains(filterList[index]))
-                                      ? ConstantData.primaryColor //accentColors
+                                      ? ConstantData.whiteColor //accentColors
                                       : ConstantData.kGreyTextColor,
                                   1,
                                   TextAlign.center,
