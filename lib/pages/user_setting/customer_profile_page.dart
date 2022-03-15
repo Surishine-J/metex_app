@@ -347,7 +347,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         CustomerEditProfilePage(
-                                            userprofileList: userprofileList,
+                                          
                                             userId: widget.userId,
                                             userName: widget.userName,
                                             userType: widget.userType),
@@ -395,12 +395,12 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                               ),
                               onTap: () {
                                 // Navigator.pushNamed( context, '/changepassword');
-                                Navigator.push(
+                               /* Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => EditPicturePage(),
                                   ),
-                                );
+                                );*/
                               },
                             ),
                           ],

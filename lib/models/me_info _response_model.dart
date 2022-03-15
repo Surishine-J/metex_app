@@ -33,6 +33,10 @@ class Token {
     loginUser = LoginUser.fromJson(json['loginUser']);
   }
 
+// factory Token.fromJson(Map<String, dynamic> json) =>LoginUser(
+//      userProfileGroupUId : json['user_profile_group_u_id'] == null ? '' : json['user_profile_group_u_id'],
+//    );
+
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['loginUser'] = loginUser.toJson();

@@ -280,6 +280,16 @@ class S {
     );
   }
 
+  /// `ข้อมูลงาน`
+  String get workbutton {
+    return Intl.message(
+      'ข้อมูลงาน',
+      name: 'workbutton',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `แก้ไขข้อมูลส่วนตัวแอดมิน`
   String get editprofileadmin {
     return Intl.message(

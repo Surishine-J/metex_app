@@ -1,18 +1,41 @@
+import 'dart:convert' as convert;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:metex_app/generated/l10n.dart';
+import 'package:metex_app/models/me_info%20_response_model.dart';
+import 'package:metex_app/models/userprofile_response.dart';
 import 'package:metex_app/pages/pages.dart';
+import 'package:metex_app/services/config.dart';
 import 'package:metex_app/utils/utils.dart';
 
 class CreateGroupPage extends StatefulWidget {
-  const CreateGroupPage({Key? key}) : super(key: key);
+  // late String userId;
+  // late String userName;
+  // late String userType;
+  late LoginUser? userlogin;
+  CreateGroupPage({
+    Key? key,
+    // required this.userId,
+    // required this.userName,
+    // required this.userType
+     required this.userlogin
+
+  }) : super(key: key);
 
   @override
   _CreateGroupPageState createState() => _CreateGroupPageState();
 }
 
 class _CreateGroupPageState extends State<CreateGroupPage> {
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController groupNameController = new TextEditingController();
+  late List<UserProfileData> userprofileList = [];
+  UserProfileData? dropdownValue;
+  final storage = new FlutterSecureStorage();
+  var loginUserToken;
 
   Future<bool> _requestPop() {
     Navigator.of(context).pop();
@@ -20,19 +43,119 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
     return new Future.value(false);
   }
 
-  late String _selectedValue = 'ชาย';
-  List<DropdownMenuItem<String>> items = [
-    'ชาย',
-    'หญิง',
-  ].map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.black, fontSize: 14),
-      ),
-    );
-  }).toList();
+  /*toCheckLoginData() async {
+    // Create storage
+    loginUserToken = await storage.read(key: 'loginUserToken');
+    if (loginUserToken != null) {
+     // getMeInfo(loginUserToken);
+    }
+  }
+*/
+ /* getMeInfo(String loginUserToken) async {
+    var data = {"token": loginUserToken};
+    try {
+      Uri url = Uri.parse(Config.BASE_URL + '/api/me/info'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        final MeInfoResponseModel meinfo =
+            MeInfoResponseModel.fromJson(convert.jsonDecode(response.body));
+        setState(() {
+          userlogin = meinfo.data.loginUser;
+          //print(location);
+        });
+
+        /* Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavAfterLoginPage(
+                userId: userlogin.userId.toString(),
+                userName: userlogin.userName,
+                userType: userlogin.userType),
+          ),
+        );*/
+      } else {
+        /* ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Logout ไปแล้ว')));*/
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+*/
+  toGetUserProfileData() async {
+    var data = {"user_id": widget.userlogin!.userId.toString()};
+    try {
+      Uri url =
+          Uri.parse(Config.BASE_URL + '/api/user/userprofile'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+
+      if (response.statusCode == 200) {
+        //  print(response.body);
+        final UserProfileResponseModel userprofile =
+            UserProfileResponseModel.fromJson(
+                convert.jsonDecode(response.body));
+        setState(() {
+          userprofileList = userprofile.data;
+          print("======> " + userprofileList.length.toString());
+          print(userprofileList[0].userProfileGender);
+        });
+      } else {}
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  toSaveCreateGroup() async {
+    var data = {
+      "token": loginUserToken,
+      "name": groupNameController.text,
+      "user_profile_id": userprofileList[0].userProfileId,
+      "user_id": widget.userlogin!.userId.toString()
+    };
+    try {
+      Uri url =
+          Uri.parse(Config.BASE_URL + '/api/user/group/create'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print(response.body);
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('สร้างกลุ่มสำเร็จ')));
+        Navigator.of(context).pop();
+        // toGetUserProfileData();
+      } else {
+        print(response.body);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('สร้างกลุ่มไม่สำเร็จ')));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //toCheckLoginData();
+    toGetUserProfileData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +165,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
     return new MaterialApp(
       // title: 'SingleChildScrollView Demo',
-        debugShowCheckedModeBanner: false,
-     home: WillPopScope(
-      //  onWillPop: _requestPop,
+      debugShowCheckedModeBanner: false,
+      home: WillPopScope(
+        //  onWillPop: _requestPop,
         child: new Scaffold(
           // home: new Scaffold(
 
@@ -91,9 +214,14 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                           Container(
                             margin: EdgeInsets.only(bottom: 10, top: 10),
                             height: editTextHeight,
-                            child: TextField(
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Group Name is Required';
+                                }
+                              },
                               maxLines: 1,
-                              controller: emailController,
+                              controller: groupNameController,
                               // controller:  S.of(context).documentNo.toString(),
                               style: TextStyle(
                                   fontFamily: ConstantData.fontFamily,
@@ -117,18 +245,12 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             padding: EdgeInsets.only(bottom: 10),
                           ),
                           Container(
-                           // 
+                            // height: 40.0,
                             height: editTextHeight,
-                           padding: EdgeInsets.only(left: 146, right: 146),
-                            /*decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(),
-                              color: Colors.cyanAccent),*/
+                            padding: EdgeInsets.only(left: 20, right: 20),
+                            width: 450,
 
-                            //   margin: EdgeInsets.only(bottom: 10, top: 10,left: 20, right: 20),
-                            // height: editTextHeight,
                             decoration: BoxDecoration(
-                              //color: Colors.red,
                               color: ConstantData.bgColor,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
@@ -137,21 +259,35 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                                 color: ConstantData.lightGrey, width: .5),*/
                             ),
                             child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                // isExpanded: true,
+                              child: DropdownButton<UserProfileData>(
+                                value: dropdownValue,
+                                //isExpanded: true,
                                 icon: Icon(Icons.arrow_drop_down,
                                     color: Colors.grey.withOpacity(0.7)),
-                                items: items,
-                                onChanged: (String? value) {
-                                  /* setState(() {
-                          _selectedValue = value!;
-                        });*/
-                                  print('----- value ------');
-                                  print(_selectedValue);
-                                  print(editTextHeight);
+                                // items: items,
+                                items: userprofileList
+                                    //items:locationSelectList
+                                    .map<DropdownMenuItem<UserProfileData>>(
+                                        (UserProfileData value) {
+                                  return DropdownMenuItem<UserProfileData>(
+                                    value: value,
+                                    child:
+                                        Text(value.userProfileName.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (UserProfileData? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue;
+                                    print('----- value ------');
+                                    print(dropdownValue!.userProfileId
+                                            .toString() +
+                                        " " +
+                                        dropdownValue!.userProfileName
+                                            .toString());
+                                  });
                                 },
                                 hint: Text(
-                                  "---- เลือกหัวหน้ากลุ่ม ----",
+                                  "------- เลือกหัวหน้ากลุ่ม -------",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -183,23 +319,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                                   ),
                                 )),
                             onTap: () {
-                              // PrefData.setIsSignIn(true);
-
-                              /* Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => TabWidget(),
-                                    ),
-                                  );*/
-                             //  Navigator.pushNamed(context, '/groupdetails');
-                              /* Navigator.pushReplacementNamed(
-                                    context,
-                                    '/nav'
-                                  );*/
-                               /*Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) => RegisterPage()));*/
+                              toSaveCreateGroup();
                             },
                           ),
                         ],
@@ -226,7 +346,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
             ),
           ),
         ),
-         onWillPop: _requestPop,
+        onWillPop: _requestPop,
         /* onWillPop: () async {
             return false;
           }*/

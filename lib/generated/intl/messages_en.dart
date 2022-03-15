@@ -118,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "topstar": MessageLookupByLibrary.simpleMessage("อันดับที่"),
         "type": MessageLookupByLibrary.simpleMessage("ประเภท"),
         "verified": MessageLookupByLibrary.simpleMessage("ผ่านการประเมิน"),
+        "workbutton": MessageLookupByLibrary.simpleMessage("ข้อมูลงาน"),
         "year": MessageLookupByLibrary.simpleMessage(" ปี"),
         "you": MessageLookupByLibrary.simpleMessage("คุณคือใคร"),
         "youfavorite": MessageLookupByLibrary.simpleMessage("ที่คุณถูกใจ"),

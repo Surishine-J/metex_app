@@ -1,30 +1,28 @@
+import 'dart:convert' as convert;
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_multiselect/flutter_multiselect.dart';
 
+import 'package:http/http.dart' as http;
 
 import 'package:metex_app/models/zone_models.dart';
-
 import 'package:metex_app/pages/all_experts/all_experts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 import 'package:metex_app/pages/login/user_login_page.dart';
 import 'package:metex_app/pages/nav/test.dart';
 import 'package:metex_app/pages/nav/test2.dart';
 import 'package:metex_app/pages/nav/test3.dart';
+import 'package:metex_app/pages/nav/test4.dart';
 import 'package:metex_app/pages/pages.dart';
 import 'package:metex_app/pages/register/register_page.dart';
 import 'package:metex_app/services/zone_services.dart';
 
 import 'generated/l10n.dart';
-
 import 'pages/nav/nav_afterLogin_page.dart';
 import 'pages/nav/product_page.dart';
 
-
 void main() {
- 
   runApp(MyApp());
 }
 
@@ -74,8 +72,9 @@ class MyApp extends StatelessWidget {
       },*/
 
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
-       home: NavBeforeLoginPage(),
-      //home: MyHomePage(),
+     home: NavBeforeLoginPage(),
+      // home: MyHomePage(),
+     // home: CheckBoxListTileExample(),
     );
   }
 }
@@ -91,8 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   _getDataZone();
-  // ZoneServices().getDataZone();
+    _getDataZone();
+    // ZoneServices().getDataZone();
   }
 
   _getDataZone() async {
@@ -110,23 +109,138 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _onFormSaved() {
+    final FormState? form = _formKey.currentState;
+    form?.save();
+  }
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Demo Get Data Zones'),
+        appBar: AppBar(
+          title: Text('widget.title'),
+        ),
+        body: SafeArea(
+            child: Center(
+          child: CheckboxWidget(location: location),
+        )));
+  }
+}
+
+class CheckboxWidget extends StatefulWidget {
+  List<LocationModel> location;
+  CheckboxWidget({
+    Key? key,
+    required this.location,
+  });
+  @override
+  CheckboxWidgetState createState() => new CheckboxWidgetState();
+}
+
+class CheckboxWidgetState extends State {
+  Map<String, bool> values = {
+    'Apple': false,
+    'Banana': false,
+    'Cherry': false,
+    'Mango': false,
+    'Orange': false,
+  };
+
+  var tmpArray = [];
+
+  getCheckboxItems() {
+    values.forEach((key, value) {
+      if (value == true) {
+        tmpArray.add(key);
+      }
+    });
+
+    // Printing all selected items on Terminal screen.
+    print(tmpArray);
+    // Here you will get all your selected Checkbox items.
+
+    // Clear array after use.
+    tmpArray.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 40, right: 40),
+      child: Container(
+        //  color: Colors.pinkAccent,
+        child: Column(
+          children: <Widget>[
+            RaisedButton(
+              child: Text(
+                " Get Selected Checkbox Items ",
+                style: TextStyle(fontSize: 18),
+              ),
+              onPressed: getCheckboxItems,
+              color: Colors.deepOrange,
+              textColor: Colors.white,
+              splashColor: Colors.grey,
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            ),
+            /* Expanded(
+              child: ListView(
+                children: values.keys.map((String key) {
+                  return new CheckboxListTile(
+                    title: new Text(key),
+                    value: values[key],
+                    activeColor: Colors.pink,
+                    checkColor: Colors.white,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        values[key] = value!;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+            ),*/
+
+            Expanded(
+              child: ListView(
+                children: values.keys.map((String key) {
+                  return new CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: new Text(key),
+                    value: values[key],
+                    activeColor: Colors.pink,
+                    checkColor: Colors.white,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        values[key] = value!;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+
+            /* Expanded(
+                  child: ListView(
+                    children: widget.location.keys.map((LocationModel key) {
+                      return new CheckboxListTile(
+                         controlAffinity: ListTileControlAffinity.leading,
+                        title: new Text(key.zoneName),
+                        value: values[key],
+                        activeColor: Colors.pink,
+                        checkColor: Colors.white,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            location[key] = value!;
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),*/
+          ],
+        ),
       ),
-      body: ListView.separated(
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(location[index].zoneName),
-              subtitle: Text(location[index].zoneName),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return Divider();
-          },
-          itemCount: location.length),
     );
   }
 }

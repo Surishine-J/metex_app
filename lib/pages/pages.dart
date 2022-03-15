@@ -11,7 +11,7 @@ export 'group/create_group_page.dart';
 export 'group/group_details_page.dart';
 
 export 'about/about_page.dart';
-export 'admin_setting/admin_setting_page.dart';
+
 
 export 'editprofile/editprofile_admin_page.dart';
 export 'changepassword/changepassword_admin_page.dart';

@@ -59,7 +59,17 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
           //print(location);
         });
 
-        Navigator.push(
+      
+        userlogin.userType == '2'? 
+         Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavAfterLoginPage(
+                userId: userlogin.userId.toString(),
+                userName: userlogin.userName,
+                userType: userlogin.userType),
+          ),
+        ): Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => NavAfterLoginPage(
@@ -153,11 +163,11 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
                               text: "หน้าแอดมิน"),*/
                       ],
 
-                      /*labelStyle: TextStyle(
+                      labelStyle: TextStyle(
                                 color: ConstantData.whiteColor,
                                 fontWeight: FontWeight.bold,
-                                fontSize: ConstantData.font15Px,
-                                fontFamily: ConstantData.fontFamily),*/
+                                fontSize: 16,//ConstantData.font15Px,
+                                fontFamily: ConstantData.fontFamily),
 
                       // unselectedLabelStyle: TextStyle(
                       //     color: ConstantData.whiteColor,
@@ -178,7 +188,8 @@ class _NavBeforeLoginPageState extends State<NavBeforeLoginPage>
           body: TabBarView(
             children: [
               HomeBeforeLoginPage(),
-              GroupBeforeLoginPage(),
+             // GroupBeforeLoginPage(),
+               GroupPage(),
               AboutPage(),
               // DemoApp(),
               UserLoginPage(),

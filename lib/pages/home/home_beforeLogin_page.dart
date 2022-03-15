@@ -1,14 +1,14 @@
-import 'package:age_calculator/age_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:intl/intl.dart';
 import 'package:metex_app/data/data.dart';
 import 'package:metex_app/generated/l10n.dart';
-import 'package:metex_app/models/api_respose.dart';
+
 import 'package:metex_app/models/experts_model.dart';
 import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
+import 'package:metex_app/models/work_all_response.dart';
 
 import 'package:metex_app/pages/pages.dart';
 import 'package:metex_app/services/config.dart';
@@ -62,17 +62,27 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
   List<CareerTypeDataModel> selectFilterCareerList = [];
 
   List<ExpertDetails> allExpertlist = [];
+List<ExpertDetails> craftsmanExpertList = [];
+  List<ExpertDetails> fruitExpertList = [];
+  List<ExpertDetails> vegetableExpertList = [];
+  List<ExpertDetails> carbonExpertList = [];
 
-  List<ExpertDetails> coachList = [];
-  List<ExpertDetails> trainerList = [];
-  List<ExpertDetails> consultantList = [];
+List<WorkData> allWorkList = [];
+  List<WorkData> workList = [];
+  List<WorkData> craftsmanList = [];
+  List<WorkData> fruitList = [];
+  List<WorkData> vegetableList = [];
+  List<WorkData> cabonList = [];
+
   List<ExpertDetails> chooseExpertlist = [];
+
+  List<String> work = [];
 
 //  List<SubCategoryModel> subList = [];
   List<ExpertDetails> subList = [];
 
-  getDataZone() async {
-    var response = await http.get(
+ getDataZone() async {
+    var response = await http.post(
       Uri.parse(Config.BASE_URL + '/api/zone/all'),
     );
     if (response.statusCode == 200) {
@@ -80,23 +90,23 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
           ZoneModel.fromJson(convert.jsonDecode(response.body));
       setState(() {
         location = zoneModel.data;
-        /* locationSelectList.add(
-            LocationModel(zoneId: 0, zoneName: "เลือกโซน",zoneOrder: 0));
-        locationSelectList.addAll(location);*/
+        /*  locationSelectList
+            .add(LocationModel(zoneId: 0, zoneName: "เลือกโซน", zoneOrder: 0));
+        locationSelectList.addAll(location);
+        dropdownValue = locationSelectList[0];*/
       });
     } else {
-      print('Error getDataZone');
+      print('Error');
     }
   }
 
   getDataExpertType() async {
-    var response = await http.get(
+    var response = await http.post(
       Uri.parse(Config.BASE_URL + '/api/user/usertype2/all'),
     );
     if (response.statusCode == 200) {
       final CareerTypeModel careerTypeModel =
           CareerTypeModel.fromJson(convert.jsonDecode(response.body));
-
       setState(() {
         careerList = careerTypeModel.data;
         selectionCareerList.add(
@@ -104,17 +114,15 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
         selectionCareerList.addAll(careerList);
       });
     } else {
-      print('Error getDataExpertType ');
+      print('Error');
     }
   }
 
   getDataExpertAll() async {
-     var data = {
-        "user_id": null,
-       
-      };
-    Uri url =
-        Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
+    var data = {
+      "user_id": null,
+    };
+    Uri url = Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -123,6 +131,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
       // body: convert.jsonEncode(data)
     );
     // print(data);
+    // print(response.body);
 
     if (response.statusCode == 200) {
       // print(response.body);
@@ -131,21 +140,24 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
 //var seen = Set<ExpertDetails>();
       setState(() {
         allExpertlist = searchModel.data.expertdetails
-            .where((element) => element.userProfileType == 'u')
+            .where((element) =>
+                element.userProfileType == 'u' &&
+                element.userProfileIsActive == 1)
             .toList();
         // .where((expertdetails) => seen.add(expertdetails) )
         // .toList();
-        coachList = allExpertlist
-            .where((element) => element.userProfileType2 == 1)
+        craftsmanExpertList = allExpertlist
+            .where((element) => element.userType2Id == '1')
             .toList();
-        trainerList = allExpertlist
-            .where((element) => element.userProfileType2 == 2)
+        fruitExpertList = allExpertlist
+            .where((element) => element.userType2Id == '2')
             .toList();
-        consultantList = allExpertlist
-            .where((element) => element.userProfileType2 == 3)
+        vegetableExpertList = allExpertlist
+            .where((element) => element.userType2Id == '3')
             .toList();
-
-        //print(careerTypeModel.data[0].user_type2_name);
+        carbonExpertList = allExpertlist
+            .where((element) => element.userType2Id == '4')
+            .toList();
       });
     } else {
       print('Error getDataExpertAll');
@@ -157,68 +169,23 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
       return allExpertlist;
     }
     if (selectedPos == 1) {
-      return coachList;
+      return craftsmanExpertList;
     }
     if (selectedPos == 2) {
-      return trainerList;
+      return fruitExpertList;
     }
     if (selectedPos == 3) {
-      return consultantList;
+      return vegetableExpertList;
     }
     if (selectedPos == 4) {
-      return consultantList;
+      return carbonExpertList;
     }
     return null;
-  }
-
-  String calAge(String dateOfBireth) {
-    String result = "aa";
-    int yb = DateTime.parse(dateOfBireth).year;
-    int mb = DateTime.parse(dateOfBireth).month;
-    int db = DateTime.parse(dateOfBireth).day;
-
-    print(yb);
-
-    /* DateTime birthday = DateTime(yb, mb, db);
-
-    DateDuration duration;
-    duration = AgeCalculator.age(birthday,
-        today: DateTime(
-            2022, 02, 25));
-    // print('Your age is $duration' + "====>" + "$birthday ");
-    result = duration.years.toString();*/
-
-    return result;
-  }
-
-  calculateAge(String _birthDate) {
-    DateTime currentDate = DateTime.now();
-    print('_birthDate===>' + '$_birthDate');
-    print('currentDate===>' + '$currentDate');
-
-    DateTime birthDate = DateTime.parse(_birthDate);
-    int age = currentDate.year - birthDate.year;
-    int month1 = currentDate.month;
-    int month2 = birthDate.month;
-    if (month2 > month1) {
-      age--;
-    } else if (month1 == month2) {
-      int day1 = currentDate.day;
-      int day2 = birthDate.day;
-      if (day2 > day1) {
-        age--;
-      }
-    }
-    print('age ===>' '$age');
-    return age.toString();
   }
 
   sendParamToNextPage() {
     search = searchController.text;
     type2 = selectedPos;
-
-    // zone_id = dropdownValue!.zoneId == null?0:dropdownValue!.zoneId;
-    //print('zonic' + dropdownValue!.zoneId.toString());
 
     Navigator.push(
         context,
@@ -237,6 +204,66 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                 )));
   }
 
+  getDataWork() async {
+    var response = await http.post(
+      Uri.parse(Config.BASE_URL + '/api/user/work/all'),
+    );
+    // print(response.body);
+    if (response.statusCode == 200) {
+      final WorkAllResponseModel zoneModel =
+          WorkAllResponseModel.fromJson(convert.jsonDecode(response.body));
+      setState(() {
+        allWorkList = zoneModel.data;
+        craftsmanList = allWorkList
+            .where((element) => element.workUserType2Id == 1)
+            .toList();
+        fruitList = allWorkList
+            .where((element) => element.workUserType2Id == 2)
+            .toList();
+        vegetableList = allWorkList
+            .where((element) => element.workUserType2Id == 3)
+            .toList();
+        cabonList = allWorkList
+            .where((element) => element.workUserType2Id == 4)
+            .toList();
+      });
+    } else {
+      print('Error getDataZone');
+    }
+  }
+
+  List<WorkData>? checkFilterWork() {
+    if (selectedPos == 0) {
+      workList = allWorkList;
+      return workList;
+    }
+    if (selectedPos == 1) {
+      workList = craftsmanList;
+
+      return workList;
+    }
+    if (selectedPos == 2) {
+      workList = fruitList;
+
+      return workList;
+    }
+    if (selectedPos == 3) {
+      workList = vegetableList;
+
+      return workList;
+    }
+    if (selectedPos == 4) {
+      workList = cabonList;
+
+      return workList;
+    }
+
+    return null;
+  }
+
+ 
+ 
+  
   sendDataToExpertDetailsPage(String user_profile_id) {
     print('user_profile_id =======>' + user_profile_id);
     setState(() {
@@ -305,6 +332,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
     getDataZone();
     getDataExpertType();
     getDataExpertAll();
+    getDataWork();
     //dropdownValue!.zoneId.toString();
   }
 
@@ -312,27 +340,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
 
   LocationModel? dropdownValue;
 
-  List<String> selectedFilterList = [];
-  List<String> filterList = [
-    "ไม้สัก",
-    "ไม้ยาง",
-    "ไม้พะยุง",
-    "ไม้ตะเคียนทอง",
-    "ไม้ประดู่ป่า",
-    "ไผ่",
-    "ผักอินทรีย์",
-    "ผักปลอดสารพิษ",
-    "ผักอนามัย",
-    "ผักไฮโดรโปนิกส์",
-    "ช่างแอร์",
-    "ช่างไฟฟ้า",
-    "ช่างทำกุญแจ",
-    "ช่างปั้น",
-    "ช่างทอผ้า",
-    "ช่างเงิน",
-    "ช่างจักรสาน",
-    "อื่นๆ",
-  ];
+  List<WorkData> selectedFilterList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -528,10 +536,10 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                             FontWeight.normal,
                             18.0),
                       ),
-                      Padding(
+                     /* Padding(
                         padding: EdgeInsets.only(bottom: 20),
-                      ),
-                      GridView.count(
+                      ),*/
+                     /* GridView.count(
                         //ปุ่ม  filter 7 ปุ่ม
                         shrinkWrap: true,
                         primary: true,
@@ -651,13 +659,12 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                 // height: 200,
                                 height: cellHeight2,
                                 decoration: BoxDecoration(
-                                 // color: ConstantData.bgColor,
-                                color: (selectedFilterList != null &&
-                                              selectedFilterList
-                                                  .contains(filterList[index]))
-                                          ? ConstantData
-                                              .primaryColor //accentColors
-                                          : ConstantData.bgColor,
+                                  // color: ConstantData.bgColor,
+                                  color: (selectedFilterList != null &&
+                                          selectedFilterList
+                                              .contains(filterList[index]))
+                                      ? ConstantData.primaryColor //accentColors
+                                      : ConstantData.bgColor,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(7)),
                                   border: Border.all(
@@ -692,6 +699,93 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                           },
                         ),
                       ),
+                       */
+                       Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                      ),
+                        GridView.count(
+                        //ปุ่ม  filter 7 ปุ่ม
+                        shrinkWrap: true,
+                        primary: true,
+                        mainAxisSpacing: _crossAxisSpacing2,
+                        padding: EdgeInsets.symmetric(
+                          vertical: cellMargin2,
+                          horizontal: cellMargin2 + _crossAxisSpacing2,
+                          // vertical: 50,
+                          // horizontal: 50,
+                        ),
+                        crossAxisCount: 5, //_crossAxisCount2,
+                        crossAxisSpacing: _crossAxisSpacing2,
+                        childAspectRatio: _aspectRatio2,
+                        children: List.generate(
+                         // allWorkList.length,
+                           checkFilterWork()!.length,
+                          (index) {
+                            // print( "sizes===$mainCatWidth==$mainCatHeight--$_aspectRatio");
+                            return InkWell(
+                              onTap: () {
+                                if (selectedFilterList != null &&
+                                    selectedFilterList
+                                        .contains(workList[index])) {
+                                  selectedFilterList.remove(workList[index]);
+                                   work.remove(
+                                        workList[index].workId.toString());
+                                } else {
+                                  selectedFilterList
+                                      .add(workList[index]);
+                                       work.add(
+                                        workList[index].workId.toString());
+                                }
+                                setState(() {
+                                 
+                                });
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                // height: 200,
+                                height: cellHeight2,
+                                decoration: BoxDecoration(
+                                  // color: ConstantData.bgColor,
+                                  color: (selectedFilterList != null &&
+                                          selectedFilterList
+                                              .contains(workList[index]))
+                                      ? ConstantData.primaryColor //accentColors
+                                      : ConstantData.bgColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(7)),
+                                  border: Border.all(
+                                      color: (selectedFilterList != null &&
+                                              selectedFilterList
+                                                  .contains(workList[index]))
+                                          ? ConstantData
+                                              .primaryColor //accentColors
+                                          : ConstantData
+                                              .kGreyTextColor, //Colors.transparent,
+                                      width: 1),
+                                ),
+                                child: Center(
+                                  child: ConstantWidget.getCustomText(
+                                      // filterList[index].name,
+                                      workList[index].workName,
+                                      //ConstantData.textColor,
+                                      (selectedFilterList != null &&
+                                              selectedFilterList
+                                                  .contains(workList[index]))
+                                          ? ConstantData
+                                              .whiteColor //accentColors
+                                          : ConstantData.kGreyTextColor,
+                                      1,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      ConstantWidget.getPercentSize1(
+                                          cellHeight2, 25)),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      
                       Padding(
                         padding: EdgeInsets.only(bottom: 20),
                       ),
@@ -830,13 +924,13 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                       .toString());
                                         });
                                       },
-                                      hint: Text(
+                                      /* hint: Text(
                                         "------- โซน -------",
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500),
-                                      ),
+                                      ),*/
                                       // value: _selectedValue,
                                     ),
                                   ),
@@ -900,6 +994,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                           color: Colors.grey.withOpacity(0.7)),
                                       // items: items,
                                       items: location
+                                          //items:locationSelectList
                                           .map<DropdownMenuItem<LocationModel>>(
                                               (LocationModel value) {
                                         return DropdownMenuItem<LocationModel>(
@@ -970,15 +1065,18 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                       ),
                       Center(
                         child: ConstantWidget.getCustomTextWithoutAlign(
-                            S.of(context).allexpert +
-                                " " +
-                                selectionCareerList[selectedPos]
-                                    .user_type2_name
-                                    .toString(),
-                            // Colors.black,
-                            ConstantData.primaryColor,
-                            FontWeight.w900,
-                            26.0),
+                            //  S.of(context).allexpert,
+                                // Colors.black,
+                                'พบ ผู้ให้บริการ  ' +
+                                    selectionCareerList[selectedPos]
+                                        .user_type2_name
+                                        .toString() +
+                                    "  " +
+                                    subList.length.toString() +
+                                    "  คน",
+                                ConstantData.primaryColor,
+                                FontWeight.w900,
+                                26.0),
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 20),
@@ -1024,7 +1122,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                             setState(() {});
                           },*/
                               onTap: () {
-                                sendDataToExpertDetailsPage(_subCatModle.userProfileId.toString());
+                                sendDataToExpertDetailsPage(
+                                    _subCatModle.userProfileId.toString());
                                 /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -1100,12 +1199,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                       child: ConstantWidget
                                                           .getCustomText(
                                                         //"ชาย",
-                                                        (_subCatModle
-                                                                    .userProfileGender
-                                                                    .toString() ==
-                                                                'm')
-                                                            ? "ชาย"
-                                                            : "หญิง",
+                                                        _subCatModle.gender,
+                                                          
                                                         ConstantData.textColor,
                                                         1,
                                                         TextAlign.start,
@@ -1139,16 +1234,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                     child: Center(
                                                       child: ConstantWidget
                                                           .getCustomText(
-                                                        // "฿ 20,000 ",
-                                                        (_subCatModle
-                                                                    .userProfilePrice
-                                                                    .toString() !=
-                                                                "0")
-                                                            ? "฿ " +
-                                                                _subCatModle
-                                                                    .userProfilePrice
-                                                                    .toString()
-                                                            : "฿ ไม่ระบุ",
+                                                           "฿ " +  _subCatModle.userProfilePrice,
+                                                       
 
                                                         ConstantData.whiteColor,
                                                         1,
@@ -1180,13 +1267,35 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                               // color: Colors.blue,
                                               color: ConstantData.whiteColor,
                                               width: 1.0),
-                                          image: DecorationImage(
+                                         /* image: DecorationImage(
                                               image: AssetImage(
                                                   'assets/images/no-image.png'
                                                   /* ConstantData.assetsImagePath +
                                                 _subCatModle.image[0],*/
                                                   ),
-                                              fit: BoxFit.cover),
+                                              fit: BoxFit.cover),*/
+                                        image: _subCatModle
+                                                                .userProfileImage ==
+                                                            '0'
+                                                        ? DecorationImage(
+                                                            image: AssetImage(
+                                                                'assets/images/no-image.png'
+                                                                
+                                                                ),
+                                                            fit: BoxFit.cover)
+                                                        : DecorationImage(
+                                                            image: NetworkImage(
+                                                              
+                                                                Config.BASE_URL +
+                                                                    '/public/uploads/user-profile/' +
+                                                                    _subCatModle
+                                                                        .userProfileId
+                                                                        .toString() +
+                                                                    '/' +
+                                                                    _subCatModle
+                                                                        .userProfileImage),
+                                                            fit: BoxFit.cover),
+                                       
                                         ),
                                       ),
                                     ),
@@ -1238,14 +1347,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                   ),
                                                   ConstantWidget.getSpace1(),
                                                   ConstantWidget.getCustomText(
-                                                      // _subCatModle.province,
-                                                      (_subCatModle.zoneName
-                                                                  .toString() !=
-                                                              'null')
-                                                          ? _subCatModle
-                                                              .zoneName
-                                                              .toString()
-                                                          : "ไม่ระบุโซน",
+                                                    _subCatModle.zoneName,
+                                                      
                                                       ConstantData.textColor,
                                                       1,
                                                       TextAlign.start,
@@ -1264,11 +1367,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                 children: [
                                                   ConstantWidget.getCustomText(
                                                     S.of(context).age +
-                                                        // _subCatModle.age.toString() +
-                                                        "30 " +
-                                                        /*calculateAge(_subCatModle
-                                                              .userProfileBirthDate
-                                                              .toString()) +*/
+                                                    _subCatModle.age.toString() +
+                                                       
                                                         S.of(context).year,
                                                     // colorOrange,
                                                     ConstantData.textColor,
@@ -1295,13 +1395,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                   ConstantWidget.getCustomText(
                                                     // _subCatModle.expertName
                                                     //"อาชีพ",
-                                                    (_subCatModle.userType2Name
-                                                                .toString() !=
-                                                            'null')
-                                                        ? _subCatModle
-                                                            .userType2Name
-                                                            .toString()
-                                                        : " ",
+                                                    _subCatModle.workName,
+                                                   
 
                                                     // colorOrange,
                                                     // _subCatModle.userType2Name.toString(),
@@ -1330,9 +1425,8 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                               9)),
                                                   Icon(
                                                     Icons.star,
-                                                    color: _subCatModle
-                                                                .userProfileStarRate >
-                                                            0
+                                                    color: _subCatModle.userProfileIsTopStar == 1
+                                                                
                                                         ? Colors.amber
                                                         : ConstantData
                                                             .kGreyTextColor,

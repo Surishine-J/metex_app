@@ -229,7 +229,7 @@ class ExpertDetails {
   }
 }
 */
-class SearchAllResponse {
+/*class SearchAllResponse {
   SearchAllResponse({
     required this.message,
      this.err,
@@ -451,7 +451,237 @@ class ExpertDetails {
     return _data;
   }
 }
+*/
 
+class SearchAllResponse {
+  SearchAllResponse({
+    required this.message,
+    this.err,
+    required this.data,
+  });
+  late final String message;
+  late final Null err;
+  late final Data data;
 
+  SearchAllResponse.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    err = null;
+    data = Data.fromJson(json['data']);
+  }
 
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['message'] = message;
+    _data['err'] = err;
+    _data['data'] = data.toJson();
+    return _data;
+  }
+}
 
+class Data {
+  Data({
+    required this.page,
+    required this.maxPage,
+    required this.from,
+    required this.to,
+    required this.total,
+    required this.count,
+    required this.expertdetails,
+  });
+  late final int page;
+  late final int maxPage;
+  late final int from;
+  late final int to;
+  late final int total;
+  late final int count;
+  late final List<ExpertDetails> expertdetails;
+
+  Data.fromJson(Map<String, dynamic> json) {
+    page = json['page'];
+    maxPage = json['maxPage'];
+    from = json['from'];
+    to = json['to'];
+    total = json['total'];
+    count = json['count'];
+    expertdetails =
+        List.from(json['list']).map((e) => ExpertDetails.fromJson(e)).toList();
+
+    if (json['data'] != null) {
+      List<ExpertDetails> data = [];
+      json['data'].forEach((v) {
+        data.add(new ExpertDetails.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['page'] = page;
+    _data['maxPage'] = maxPage;
+    _data['from'] = from;
+    _data['to'] = to;
+    _data['total'] = total;
+    _data['count'] = count;
+    _data['list'] = expertdetails.map((e) => e.toJson()).toList();
+    return _data;
+  }
+}
+
+class ExpertDetails {
+  ExpertDetails({
+    required this.userProfileId,
+    required this.userProfileUserId,
+    required this.userProfileType,
+    required this.userProfileName,
+    required this.gender,
+    required this.age,
+    required this.isFavorite,
+    required this.userProfileIsActive,
+    required this.about,
+    required this.userProfilePrice,
+    required this.userProfilePrice2,
+    required this.userProfileIsConfirmImage,
+    required this.userProfileIsTopStar,
+    required this.userProfileUrlId,
+    required this.lineId,
+    required this.userProfileImage,
+    required this.userProfileViewCount,
+    required this.userProfileZoneId,
+    required this.userProfileStarRate,
+    required this.facebookId,
+    required this.userProfileTel,
+    required this.zoneId,
+    required this.zoneName,
+    required this.userType2Id,
+    required this.userType2Name,
+    required this.userProfileWorkUpId,
+    required this.workId,
+    required this.workName,
+  });
+  
+   late final int userProfileId;
+  late final int userProfileUserId;
+  late final String userProfileType;
+  late final String userProfileName;
+  late final String gender;
+  late final int age;
+  late final int isFavorite;
+  late final int userProfileIsActive;
+  late final String about;
+  late final String userProfilePrice;
+  late final String userProfilePrice2;
+  late final int userProfileIsConfirmImage;
+  late final int userProfileIsTopStar;
+  late final String userProfileUrlId;
+  late final String lineId;
+  late final String userProfileImage;
+  late final int userProfileViewCount;
+  late final int userProfileZoneId;
+  late final int userProfileStarRate;
+  late final String facebookId;
+  late final String userProfileTel;
+  late final String zoneId;
+  late final String zoneName;
+  late final String userType2Id;
+  late final String userType2Name;
+  late final String userProfileWorkUpId;
+  late final String workId;
+  late final String workName;
+
+  ExpertDetails.fromJson(Map<String, dynamic> json) {
+    userProfileId = json['user_profile_id'];
+    userProfileUserId = json['user_profile_user_id'];
+    userProfileType = json['user_profile_type'];
+    userProfileName = json['user_profile_name'];
+    gender = json['gender'];
+    age = json['age'];
+    isFavorite = json['is_favorite'];
+    userProfileIsActive = json['user_profile_is_active'];
+    about = json['about'];
+    userProfilePrice = json['user_profile_price'];
+    userProfilePrice2 = json['user_profile_price2'];
+    userProfileIsConfirmImage = json['user_profile_is_confirm_image'];
+    userProfileIsTopStar = json['user_profile_is_top_star'];
+    userProfileUrlId = json['user_profile_url_id'];
+    lineId = json['line_id'];
+    userProfileImage = json['user_profile_image'];
+    userProfileViewCount = json['user_profile_view_count'];
+    userProfileZoneId = json['user_profile_zone_id'];
+    userProfileStarRate = json['user_profile_star_rate'];
+    facebookId = json['facebook_id'];
+    userProfileTel = json['user_profile_tel'];
+    zoneId = json['zone_id'];
+    zoneName = json['zone_name'];
+    userType2Id = json['user_type2_id'];
+    userType2Name = json['user_type2_name'];
+    userProfileWorkUpId = json['user_profile_work_up_id'];
+    workId = json['work_id'];
+    workName = json['work_name'];
+  }
+
+ /* factory ExpertDetails.fromJson(Map<String, dynamic> json) =>ExpertDetails(
+   userProfileId : json['user_profile_id'] == null ? '' : json['user_profile_id'], 
+    userProfileUserId : json['user_profile_user_id'] == null?  '' : json['user_profile_user_id'],
+    userProfileType : json['user_profile_type'] == null ? '' :json['user_profile_type'],
+    userProfileName : json['user_profile_name'] == null ? '' :json['user_profile_name'],
+    gender : json['gender'] ==  null ? '' :json['gender'],
+    age : json['age'] == null ? '':json['age'],
+    isFavorite : json['is_favorite'] == null ? '' :json['is_favorite'],
+    userProfileIsActive : json['user_profile_is_active'] == null ? '' :json['user_profile_is_active'],
+    about : json['about'] == null ? '' :json['about'],
+    userProfilePrice : json['user_profile_price'] == null ? '' : json['user_profile_price'],
+    userProfilePrice2 : json['user_profile_price2'] == null ? '' : json['user_profile_price2'],
+    userProfileIsConfirmImage : json['user_profile_is_confirm_image'] == null ? '':  json['user_profile_is_confirm_image'],
+    userProfileIsTopStar : json['user_profile_is_top_star'] == null ? '' : json['user_profile_is_top_star'],
+    userProfileUrlId : json['user_profile_url_id'] == null ? '' : json['user_profile_url_id'],
+    lineId : json['line_id'] == null ? '': json['line_id'] ,
+    userProfileImage : json['user_profile_image'] == null? '':json['user_profile_image'],
+    userProfileViewCount : json['user_profile_view_count'] == null?'' :json['user_profile_view_count'],
+    userProfileZoneId : json['user_profile_zone_id'] == null ? '' :json['user_profile_zone_id'],
+    userProfileStarRate : json['user_profile_star_rate'] == null? '' : json['user_profile_star_rate'],
+    facebookId : json['facebook_id'] == null ? '' : json['facebook_id'],
+    userProfileTel : json['user_profile_tel'] == null ? '' : json['user_profile_tel'],
+    zoneId : json['zone_id'] == null ? '' : json['zone_id'],
+    zoneName : json['zone_name'] == null? '' :  json['zone_name'],
+    userType2Id : json['user_type2_id'] == null ? '' : json['user_type2_id'],
+    userType2Name : json['user_type2_name'] == null ? '' : json['user_type2_name'],
+    userProfileWorkUpId : json['user_profile_work_up_id'] == null ? '' :json['user_profile_work_up_id'],
+    workId : json['work_id'] == null? '' : json['work_id'],
+    workName : json['work_name'] == null? '' :json['work_name']
+    
+  );*/
+    
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['user_profile_id'] = userProfileId;
+    _data['user_profile_user_id'] = userProfileUserId;
+    _data['user_profile_type'] = userProfileType;
+    _data['user_profile_name'] = userProfileName;
+    _data['gender'] = gender;
+    _data['age'] = age;
+    _data['is_favorite'] = isFavorite;
+    _data['user_profile_is_active'] = userProfileIsActive;
+    _data['about'] = about;
+    _data['user_profile_price'] = userProfilePrice;
+    _data['user_profile_price2'] = userProfilePrice2;
+    _data['user_profile_is_confirm_image'] = userProfileIsConfirmImage;
+    _data['user_profile_is_top_star'] = userProfileIsTopStar;
+    _data['user_profile_url_id'] = userProfileUrlId;
+    _data['line_id'] = lineId;
+    _data['user_profile_image'] = userProfileImage;
+    _data['user_profile_view_count'] = userProfileViewCount;
+    _data['user_profile_zone_id'] = userProfileZoneId;
+    _data['user_profile_star_rate'] = userProfileStarRate;
+    _data['facebook_id'] = facebookId;
+    _data['user_profile_tel'] = userProfileTel;
+    _data['zone_id'] = zoneId;
+    _data['zone_name'] = zoneName;
+    _data['user_type2_id'] = userType2Id;
+    _data['user_type2_name'] = userType2Name;
+    _data['user_profile_work_up_id'] = userProfileWorkUpId;
+    _data['work_id'] = workId;
+    _data['work_name'] = workName;
+    return _data;
+  }
+}

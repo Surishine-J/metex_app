@@ -38,40 +38,47 @@ class _FavoritePageState extends State<FavoritePage> {
     return new Future.value(false);
   }
 
- 
-
   getMyFavorite() async {
-    var response = await http.post(
-      Uri.parse(Config.BASE_URL +'/api/user/search/all'),
-    );
-    // print('get expert all' + " " + response.statusCode.toString());
-    if (response.statusCode == 200) {
-      print(response.body);
-      final SearchAllResponse searchModel =
-          SearchAllResponse.fromJson(convert.jsonDecode(response.body));
+    var data = {"user_id": widget.userId};
+    try {
+      Uri url =
+          Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      if (response.statusCode == 200) {
+        print(response.body);
+        final SearchAllResponse searchModel =
+            SearchAllResponse.fromJson(convert.jsonDecode(response.body));
 
-      setState(() {
-        allExpertlist = searchModel.data.expertdetails;
+        setState(() {
+          allExpertlist = searchModel.data.expertdetails
+              .where((element) => element.userProfileType == 'u')
+              .toList();
 
-        favoriteList = allExpertlist.where((element) => element.isFavorite == 1)
-           // .where((element) =>
+          favoriteList = allExpertlist
+              .where((element) => element.isFavorite == 1)
+              // .where((element) =>
               //  element.userFavoriteUserId == int.parse(widget.userId))
-              
-            .toList();
 
-        //print(careerTypeModel.data[0].user_type2_name);
-      });
-    } else {
-      print('Error getDataExpertAll');
-    }
+              .toList();
+
+          //print(careerTypeModel.data[0].user_type2_name);
+        });
+      } else {
+        print('Error getDataExpertAll');
+      }
+    } catch (e) {}
   }
 
-
- sendDataToExpertDetailsPage(String user_profile_id) {
+  sendDataToExpertDetailsPage(String user_profile_id) {
     print('user_profile_id =======>' + user_profile_id);
     setState(() {
       chooseExpertlist = favoriteList
-          .where((element) => element.userProfileId == int.parse(user_profile_id))
+          .where(
+              (element) => element.userProfileId == int.parse(user_profile_id))
           .toList();
 
       print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
@@ -85,6 +92,7 @@ class _FavoritePageState extends State<FavoritePage> {
       }
     });
   }
+
   List<List<ExpertModel>> allCatList = [DataFile.getAllExpertModel()];
 //  List<SubCategoryModel> subList = [];
   List<ExpertModel> subList = [];
@@ -97,15 +105,67 @@ class _FavoritePageState extends State<FavoritePage> {
   int selectedPos = 0;
 
   TextEditingController emailController = new TextEditingController();
+  toCreateFavorite(String userId, String userProfileId) async {
+    var data = {
+      "user_id": userId,
+      "user_profile_id": userProfileId,
+    };
+    try {
+      Uri url = Uri.parse(
+          Config.BASE_URL + '/api/user/favorite/create'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      print('data');
+      print(data);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        getMyFavorite();
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('ไม่พบผู้ใช้ ')));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
+  toDeleteFavorite(String userId, String user_profile_id) async {
+    var data = {
+      "user_id": userId,
+      "user_profile_id": user_profile_id
+      // "user_favorite_id": userFavoriteId
+    };
+    try {
+      Uri url = Uri.parse(
+         Config.BASE_URL + '/api/user/favorite/delete'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      print(data);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        getMyFavorite();
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('ไม่พบผู้ใช้ ')));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
-
- @override
+  @override
   void initState() {
     super.initState();
 
     getMyFavorite();
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -454,10 +514,10 @@ class _FavoritePageState extends State<FavoritePage> {
                                   subListFavorite[index];
 
                               return InkWell(
-                            
                                 onTap: () {
-                                sendDataToExpertDetailsPage(
-                                _subCatModleFavorite.userProfileId.toString());
+                                  sendDataToExpertDetailsPage(
+                                      _subCatModleFavorite.userProfileId
+                                          .toString());
                                 },
                                 child: Container(
                                   width: double.infinity,
@@ -485,14 +545,9 @@ class _FavoritePageState extends State<FavoritePage> {
                                                         BorderRadius.circular(
                                                             100),
                                                   ),
-                                                  /* child: Icon(
-                                                    Icons.favorite_border_rounded,
-                                                    color: Colors.white,
-                                                  ),*/
-                                                 /* child: _subCatModleFavorite
-                                                              .userFavoriteUserId ==
-                                                          int.parse(
-                                                              widget.userId)
+                                                  child: _subCatModleFavorite
+                                                              .isFavorite ==
+                                                          1
                                                       ? IconButton(
                                                           icon: Icon(
                                                             Icons.favorite,
@@ -501,7 +556,21 @@ class _FavoritePageState extends State<FavoritePage> {
                                                           //  color: ConstantData.kGreyTextColor,
                                                           color: ConstantData
                                                               .redColor,
-                                                          onPressed: () {},
+                                                          onPressed: () {
+                                                            toDeleteFavorite(
+                                                                widget.userId
+                                                                    .toString(),
+                                                                _subCatModleFavorite
+                                                                    .userProfileId
+                                                                    .toString());
+
+                                                            print(
+                                                                'userFavoriteUserId กดไลค์แล้ว  ======> ');
+                                                            print(
+                                                                widget.userId);
+                                                            print(_subCatModleFavorite
+                                                                .userProfileId);
+                                                          },
                                                         )
                                                       : IconButton(
                                                           icon: Icon(
@@ -512,54 +581,20 @@ class _FavoritePageState extends State<FavoritePage> {
                                                           color: ConstantData
                                                               .kGreyTextColor,
                                                           // color: ConstantData.redColor,
-                                                          onPressed: () {},
-                                                        ),*/
-                                                        child: _subCatModleFavorite
-                                                        .isFavorite == 1
-                                                   
-                                                ? IconButton(
-                                                    icon: Icon(
-                                                      Icons.favorite,
-                                                    ),
-                                                    iconSize: 20,
-                                                    //  color: ConstantData.kGreyTextColor,
-                                                    color:
-                                                        ConstantData.redColor,
-                                                    onPressed: () {
-                                                     /* toDeleteFavorite(
-                                                          _subCatModleTopStar
-                                                              .userProfileUserId
-                                                              .toString(),
-                                                         _subCatModleTopStar.userProfileId.toString()
-                                                         );*/
-
-                                                      print(
-                                                          'userFavoriteUserId กดไลค์แล้ว  ======> ');
-                                                    
-                                                    },
-                                                  )
-                                                : IconButton(
-                                                    icon: Icon(
-                                                      Icons
-                                                          .favorite_border_outlined,
-                                                    ),
-                                                    iconSize: 20,
-                                                    color: ConstantData
-                                                        .kGreyTextColor,
-                                                    // color: ConstantData.redColor,
-                                                    onPressed: () {
-                                                      /*toCreateFavorite(
-                                                          widget.userId,
-                                                          _subCatModleTopStar
-                                                              .userProfileId
-                                                              .toString());*/
-                                                      print(
-                                                          'userFavoriteUserId ยังไม่กดไลค์  ======> ');
-                                                      print(widget.userId);
-                                                     /* print(_subCatModleTopStar
-                                                          .userProfileId);*/
-                                                    },
-                                                  ),
+                                                          onPressed: () {
+                                                            toCreateFavorite(
+                                                                widget.userId,
+                                                                _subCatModleFavorite
+                                                                    .userProfileId
+                                                                    .toString());
+                                                            print(
+                                                                'userFavoriteUserId ยังไม่กดไลค์  ======> ');
+                                                            print(
+                                                                widget.userId);
+                                                            print(_subCatModleFavorite
+                                                                .userProfileId);
+                                                          },
+                                                        ),
                                                 ),
                                               ),
                                               Row(
@@ -590,13 +625,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                       child: Center(
                                                         child: ConstantWidget
                                                             .getCustomText(
-                                                          //"ชาย",
-                                                          (_subCatModleFavorite
-                                                                      .userProfileGender
-                                                                      .toString() ==
-                                                                  'm')
-                                                              ? "ชาย"
-                                                              : "หญิง",
+                                                              _subCatModleFavorite.gender,
+                                                         
                                                           ConstantData
                                                               .textColor,
                                                           1,
@@ -633,16 +663,9 @@ class _FavoritePageState extends State<FavoritePage> {
                                                       child: Center(
                                                         child: ConstantWidget
                                                             .getCustomText(
+                                                           "฿ "+   _subCatModleFavorite.userProfilePrice,
                                                           // "฿ 20,000 ",
-                                                          (_subCatModleFavorite
-                                                                      .userProfilePrice
-                                                                      .toString() !=
-                                                                  "0")
-                                                              ? "฿ " +
-                                                                  _subCatModleFavorite
-                                                                      .userProfilePrice
-                                                                      .toString()
-                                                              : "฿ ไม่ระบุ",
+                                                         
 
                                                           ConstantData
                                                               .whiteColor,
@@ -736,15 +759,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     ConstantWidget.getSpace1(),
                                                     ConstantWidget
                                                         .getCustomText(
-                                                            // _subCatModle.province,
-                                                            (_subCatModleFavorite
-                                                                        .zoneName
-                                                                        .toString() !=
-                                                                    'null')
-                                                                ? _subCatModleFavorite
-                                                                    .zoneName
-                                                                    .toString()
-                                                                : "ไม่ระบุโซน",
+                                                          _subCatModleFavorite.zoneName,
+                                                          
                                                             ConstantData
                                                                 .textColor,
                                                             1,
@@ -765,11 +781,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     ConstantWidget
                                                         .getCustomText(
                                                       S.of(context).age +
-                                                          // _subCatModle.age.toString() +
-                                                          "อายุ" +
-                                                          /*calculateAge(_subCatModle
-                                                              .userProfileBirthDate
-                                                              .toString()) +*/
+                                                      _subCatModleFavorite.age.toString()+
+                                                         
                                                           S.of(context).year,
                                                       // colorOrange,
                                                       ConstantData.textColor,
@@ -795,16 +808,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                 1.2)),
                                                     ConstantWidget
                                                         .getCustomText(
-                                                      // _subCatModle.expertName
-                                                      //"อาชีพ",
-                                                      (_subCatModleFavorite
-                                                                  .userType2Name
-                                                                  .toString() !=
-                                                              'null')
-                                                          ? _subCatModleFavorite
-                                                              .userType2Name
-                                                              .toString()
-                                                          : " ",
+                                                          _subCatModleFavorite.workName,
+                                                    
 
                                                       // colorOrange,
                                                       // _subCatModle.userType2Name.toString(),
@@ -834,8 +839,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     Icon(
                                                       Icons.star,
                                                       color: _subCatModleFavorite
-                                                                  .userProfileStarRate >
-                                                              0
+                                                                  .userProfileIsTopStar == 1
                                                           ? Colors.amber
                                                           : ConstantData
                                                               .kGreyTextColor,

@@ -26,6 +26,7 @@
     "changepasswordbutton": "เปลี่ยนรหัสผ่าน",
     "logoutbutton": "ออกจากระบบ",
     "zonebutton": "ข้อมูลโซน",
+    "workbutton": "ข้อมูลงาน",
 
     "editprofileadmin": "แก้ไขข้อมูลส่วนตัวแอดมิน",
     "name": "ชื่อ",

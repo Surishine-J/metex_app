@@ -322,6 +322,7 @@ class DataFile {
     mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
 
     subList.add(mainModel);
+
     mainModel = new GroupModel();
     mainModel.id = 1;
     mainModel.ownername = "Kraiput_In";
@@ -329,14 +330,50 @@ class DataFile {
     mainModel.membername = ["kookkai"];
     mainModel.imagegroup = ["no-image.png"];
     mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
-
     subList.add(mainModel);
+
     mainModel = new GroupModel();
     mainModel.id = 1;
     mainModel.ownername = "Kraiput_In";
     mainModel.groupname = "กลุ่มทดสอบ 5";
     mainModel.membername = ["kookkai"];
     mainModel.imagegroup = ["groups/ai.jpg"];
+    mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
+    subList.add(mainModel);
+
+     mainModel = new GroupModel();
+    mainModel.id = 1;
+    mainModel.ownername = "Kraiput_In";
+    mainModel.groupname = "กลุ่มทดสอบ 6";
+    mainModel.membername = ["kookkai"];
+    mainModel.imagegroup = ["no-image.png"];
+    mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
+    subList.add(mainModel);
+
+      mainModel = new GroupModel();
+    mainModel.id = 1;
+    mainModel.ownername = "Kraiput_In";
+    mainModel.groupname = "กลุ่มทดสอบ 7";
+    mainModel.membername = ["kookkai"];
+    mainModel.imagegroup = ["no-image.png"];
+    mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
+    subList.add(mainModel);
+
+      mainModel = new GroupModel();
+    mainModel.id = 1;
+    mainModel.ownername = "Kraiput_In";
+    mainModel.groupname = "กลุ่มทดสอบ 8";
+    mainModel.membername = ["kookkai"];
+    mainModel.imagegroup = ["no-image.png"];
+    mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
+    subList.add(mainModel);
+
+      mainModel = new GroupModel();
+    mainModel.id = 1;
+    mainModel.ownername = "Kraiput_In";
+    mainModel.groupname = "กลุ่มทดสอบ 9";
+    mainModel.membername = ["kookkai"];
+    mainModel.imagegroup = ["no-image.png"];
     mainModel.imagemember = ["profile/15/15-1615970522.jpg"];
     subList.add(mainModel);
 

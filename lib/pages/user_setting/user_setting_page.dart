@@ -52,7 +52,7 @@ class _UserSettingPageState extends State<UserSettingPage> {
   toGetUserData() async {
     var data = {"user_id": widget.userId};
     try {
-      Uri url = Uri.parse(Config.BASE_URL +'/api/user/user'); //url on web
+      Uri url = Uri.parse(Config.BASE_URL + '/api/user/user'); //url on web
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -75,7 +75,7 @@ class _UserSettingPageState extends State<UserSettingPage> {
     }
   }
 
-  toGetUserProfileData() async {
+  /*toGetUserProfileData() async {
     var data = {"user_id": widget.userId};
     try {
       Uri url =
@@ -100,11 +100,11 @@ class _UserSettingPageState extends State<UserSettingPage> {
       print(e.toString());
     }
   }
-
+*/
   toLogout(BuildContext context) async {
     // Create storage
     final storage = new FlutterSecureStorage();
-var token = await storage.read(key: 'loginUserToken');
+    var token = await storage.read(key: 'loginUserToken');
     var data = {"token": token};
     try {
       //  Uri url = Uri.parse('http://127.0.0.1:3000/api/user/logout'); //url on web
@@ -114,7 +114,7 @@ var token = await storage.read(key: 'loginUserToken');
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: convert.jsonEncode(data));
-      print(response.statusCode);
+      //print(response.statusCode);
       if (response.statusCode == 200) {
         //print(response.body);
         Navigator.push(
@@ -140,7 +140,6 @@ var token = await storage.read(key: 'loginUserToken');
           context,
           MaterialPageRoute(
             builder: (context) => CustomerEditProfilePage(
-                userprofileList: userprofileList,
                 userId: widget.userId,
                 userName: widget.userName,
                 userType: widget.userType),
@@ -150,7 +149,9 @@ var token = await storage.read(key: 'loginUserToken');
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ExpertEditProfilePage(),
+            builder: (context) => ExpertEditProfilePage( userId: userList[0].userId.toString(),
+                userName: userList[0].userUserId.toString(),
+                userType: userList[0].userType.toString()),
           ),
         );
       } else if (userList[0].userType == 'a') {}
@@ -177,7 +178,9 @@ var token = await storage.read(key: 'loginUserToken');
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ExpertProfilePage(),
+            builder: (context) => ExpertProfilePage( userId: widget.userId,
+                userName: widget.userName,
+                userType: widget.userType),
           ),
         );
       }
@@ -211,12 +214,24 @@ var token = await storage.read(key: 'loginUserToken');
     );
   }
 
+  toCheckEditPicturePageRoute() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPicturePage(
+            userId: widget.userId,
+            userName: widget.userName,
+            userType: widget.userType),
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     toGetUserData();
-    toGetUserProfileData();
+    // toGetUserProfileData();
   }
 
   @override
@@ -444,13 +459,14 @@ var token = await storage.read(key: 'loginUserToken');
                                                           print(
                                                               'You press EditPicture Button');
                                                           // Navigator.pushNamed(context, '/tabwidget');
-                                                          Navigator.push(
+                                                          /* Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                               builder: (context) =>
                                                                   EditPicturePage(),
                                                             ),
-                                                          );
+                                                          );*/
+                                                          toCheckEditPicturePageRoute();
                                                         },
                                                       ),
                                                       Padding(
@@ -829,14 +845,16 @@ var token = await storage.read(key: 'loginUserToken');
                                                               print(
                                                                   'You press EditPicture Button');
                                                               // Navigator.pushNamed(context, '/tabwidget');
-                                                              Navigator.push(
+                                                              /* Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
                                                                           EditPicturePage(),
                                                                 ),
-                                                              );
+                                                              );*/
+
+                                                              toCheckEditPicturePageRoute();
                                                             },
                                                           ),
                                                         ],
@@ -1194,7 +1212,7 @@ var token = await storage.read(key: 'loginUserToken');
                                                                   print(
                                                                       'You press EditPicturePage Button');
                                                                   //  Navigator.pushNamed( context, '/editpicture');
-                                                                  Navigator
+                                                                  /* Navigator
                                                                       .push(
                                                                     context,
                                                                     MaterialPageRoute(
@@ -1202,7 +1220,9 @@ var token = await storage.read(key: 'loginUserToken');
                                                                           (context) =>
                                                                               EditPicturePage(),
                                                                     ),
-                                                                  );
+                                                                  );*/
+
+                                                                  toCheckEditPicturePageRoute();
                                                                 },
                                                               ),
                                                               Padding(

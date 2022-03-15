@@ -6,6 +6,7 @@ import 'package:metex_app/models/models.dart';
 import 'package:metex_app/models/search_all_response_model.dart';
 import 'package:metex_app/pages/pages.dart';
 import 'package:metex_app/services/config.dart';
+
 import 'package:metex_app/utils/utils.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -133,21 +134,6 @@ class _SearchResultPageState extends State<SearchResultPage> {
         allExpertlist = searchModel.data.expertdetails
             .where((element) => element.userProfileType == 'u')
             .toList();
-        /*if(){
-
-        }*/
-
-        /* coachList = allExpertlist
-            .where((element) => element.userProfileType2 == 1)
-            .toList();
-        trainerList = allExpertlist
-            .where((element) => element.userProfileType2 == 2)
-            .toList();
-        consultantList = allExpertlist
-            .where((element) => element.userProfileType2 == 3)
-            .toList();*/
-
-        //print(careerTypeModel.data[0].user_type2_name);
       });
     } else {
       print('Error getDataExpertAll');
@@ -155,14 +141,14 @@ class _SearchResultPageState extends State<SearchResultPage> {
   }
 
   sendDataToExpertDetailsPage(String user_profile_id) {
-    print('user_profile_id =======>' + user_profile_id);
+  //  print('user_profile_id =======>' + user_profile_id);
     setState(() {
       chooseExpertlist = allExpertlist
           .where(
               (element) => element.userProfileId == int.parse(user_profile_id))
           .toList();
 
-      print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
+     // print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
 
       if (chooseExpertlist.length > 0) {
         Navigator.push(
@@ -572,12 +558,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                         child: ConstantWidget
                                                             .getCustomText(
                                                           //"ชาย",
-                                                          (_subCatModle
-                                                                      .userProfileGender
-                                                                      .toString() ==
-                                                                  'm')
-                                                              ? "ชาย"
-                                                              : "หญิง",
+                                                          _subCatModle.gender,
+
                                                           ConstantData
                                                               .textColor,
                                                           1,
@@ -615,16 +597,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                         child: ConstantWidget
                                                             .getCustomText(
                                                           // "฿ 20,000 ",
-                                                          (_subCatModle
+                                                          _subCatModle
                                                                       .userProfilePrice
-                                                                      .toString() !=
-                                                                  "0")
-                                                              ? "฿ " +
-                                                                  _subCatModle
-                                                                      .userProfilePrice
-                                                                      .toString()
-                                                              : "฿ ไม่ระบุ",
-
+                                                                      .toString() ,
                                                           ConstantData
                                                               .whiteColor,
                                                           1,
@@ -746,11 +721,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                     ConstantWidget
                                                         .getCustomText(
                                                       S.of(context).age +
-                                                          // _subCatModle.age.toString() +
-                                                          "30 " +
-                                                          /*calculateAge(_subCatModle
-                                                              .userProfileBirthDate
-                                                              .toString()) +*/
+
+                                                      _subCatModle.age.toString() +
+                                                        
                                                           S.of(context).year,
                                                       // colorOrange,
                                                       ConstantData.textColor,
@@ -776,16 +749,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                                 1.2)),
                                                     ConstantWidget
                                                         .getCustomText(
-                                                      // _subCatModle.expertName
-                                                      //"อาชีพ",
-                                                      (_subCatModle
-                                                                  .userType2Name
-                                                                  .toString() !=
-                                                              'null')
-                                                          ? _subCatModle
-                                                              .userType2Name
-                                                              .toString()
-                                                          : " ",
+                                                          _subCatModle.workName,
+                                                   
 
                                                       // colorOrange,
                                                       // _subCatModle.userType2Name.toString(),
@@ -814,9 +779,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                                 9)),
                                                     Icon(
                                                       Icons.star,
+                                                   
                                                       color: _subCatModle
-                                                                  .userProfileStarRate >
-                                                              0
+                                                                .userProfileIsTopStar == 1
                                                           ? Colors.amber
                                                           : ConstantData
                                                               .kGreyTextColor,
@@ -824,6 +789,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                     ),
                                                     Icon(
                                                       Icons.check_circle,
+                                                    
                                                       color: _subCatModle
                                                                   .userProfileIsConfirmImage ==
                                                               1

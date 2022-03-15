@@ -5,7 +5,7 @@ import 'package:metex_app/generated/intl/messages_en.dart';
 import 'package:metex_app/generated/l10n.dart';
 import 'package:metex_app/models/adminlogin_response_model.dart';
 import 'package:metex_app/models/models.dart';
-import 'package:metex_app/pages/login/admin_login_page.dart';
+
 import 'package:metex_app/pages/pages.dart';
 import 'package:metex_app/services/config.dart';
 import 'package:metex_app/services/session.dart';
@@ -228,7 +228,11 @@ class _UserLoginPageState extends State<UserLoginPage> {
                             children: [
                               Checkbox(
                                 value: _value,
-                                onChanged: (value) {},
+                                onChanged: (value) {
+                                   setState(() {
+                                    _value = value!;
+                                  });
+                                },
                               ),
                               Text('Remember me')
                             ],
@@ -255,46 +259,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
                               validateEmailAndPassword(context);
                             },
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10, top: 10),
-                          ),
-                          InkWell(
-                            child: Container(
-                                margin: EdgeInsets.only(top: 20),
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    //gradient: Gradient.,
-                                    border: Border.all(
-                                        color: ConstantData.textColor),
-                                    color: ConstantData.whiteColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                                child: InkWell(
-                                  child: Center(
-                                    child: ConstantWidget
-                                        .getCustomTextWithoutAlign(
-                                            //  S.of(context).register,
-                                            // Colors.black,
-                                            S.of(context).adminloginpage,
-                                            ConstantData.primaryColor,
-                                            FontWeight.w900,
-                                            ConstantData.font15Px),
-                                  ),
-                                )),
-                            onTap: () {
-                              //  Navigator.pushNamed(context, '/register');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  // builder: (context) => const RegisterPage(),
-                                  builder: (context) => AdminLoginPage(),
-                                ),
-                              );
-                            },
-                          ),
-                          /* TextButton(
-                              onPressed: () {},
-                              child: Text('ไปหน้าเข้าสู่ระบบสำหรับแอดมิน'))*/
+                         
                         ],
                       ),
                     ),
