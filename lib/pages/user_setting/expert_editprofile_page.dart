@@ -32,39 +32,41 @@ class Data {
   late WorkData data;
   late bool isSelected = false;
 
- // Data({required this.isSelected, required this.title, required this.subTitle});
+  // Data({required this.isSelected, required this.title, required this.subTitle});
 }
 
 class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
-
-
   List<LocationModel> location = [];
   List<LocationModel> locationSelectList = [];
   List<CareerTypeDataModel> careerList = [];
   List<CareerTypeDataModel> selectionCareerList = []; //ตัวเลือก อาชีพ
   List<CareerTypeDataModel> selectFilterCareerList = [];
+
   TextEditingController displayNameController = new TextEditingController();
   TextEditingController lineIdController = new TextEditingController();
   TextEditingController facebookController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController searchController = new TextEditingController();
+  TextEditingController lowPriceController = new TextEditingController();
+  TextEditingController heightPriceController = new TextEditingController();
+  TextEditingController aboutController = new TextEditingController();
+  List<String> work = [];
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  LocationModel? dropdownValue;
+  LocationModel? selectZoneValue;
   CareerTypeDataModel? selectWorkTypeValue;
   late List<UserProfileData> userprofileList = [];
   List<WorkData> allWorkList = [];
   List<Data> allWorkList2 = [];
-  DateTime checkInDate = DateTime.now();
-  DateTime checkOutDate = DateTime.now();
+  //DateTime checkInDate = DateTime.now();
+  // DateTime checkOutDate = DateTime.now();
+  DateTime? birthDate = DateTime.now();
+  DateTime toDay = DateTime.now();
+
   int indexw = 0;
   int indexz = 0;
 
- 
-
   var tmpArray = [];
-
- 
- 
 
   Future<bool> _requestPop() {
     Navigator.of(context).pop();
@@ -81,20 +83,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: convert.jsonEncode(data));
-      // print(widget.userId);
+      // print(response.body);
       if (response.statusCode == 200) {
         final UserProfileResponseModel userprofile =
             UserProfileResponseModel.fromJson(
                 convert.jsonDecode(response.body));
         setState(() {
           userprofileList = userprofile.data;
-
-          // print(userprofileList[0].userProfileGender);
-          displayNameController.text =
-              userprofileList[0].userProfileName.toString();
-          userprofileList[0].userProfileGender == 'm' ? "ชาย" : "หญิง";
-          _selectedValue =
-              userprofileList[0].userProfileGender == 'm' ? "ชาย" : "หญิง";
+          //print(userprofileList[0].userProfileName.toString());
+          prepareShowData();
         });
       } else {}
     } catch (e) {
@@ -102,9 +99,8 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
     }
   }
 
-  //late String _selectedValue = 'ชาย';
-  late String _selectedValue =
-      userprofileList[0].userProfileGender == 'm' ? "ชาย" : "หญิง";
+  late String _selectedGender = 'ชาย';
+
   List<DropdownMenuItem<String>> items = [
     'ชาย',
     'หญิง',
@@ -117,6 +113,10 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
       ),
     );
   }).toList();
+
+  convertDate() {
+    var dob = "${birthDate!.year}-${birthDate!.month}-${birthDate!.day}";
+  }
 
   getDataExpertType() async {
     var response = await http.post(
@@ -168,17 +168,105 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
         allWorkList2.clear();
 
         allWorkList.forEach((element) {
-        
           Data c2 = Data();
-         
+
           c2.data = element;
-         
+
           allWorkList2.add(c2);
-           });
+        });
       });
     } else {
       print('Error getDataZone');
     }
+  }
+
+  saveExpertProfile() async {
+    //print(displayNameController.value);
+    var data = {
+      "user_profile_id": userprofileList[0].userProfileId,
+      "user_profile_name": displayNameController.value.text.isEmpty ||
+              displayNameController.value.text.trim().toString() == ""
+          ? ''
+          : displayNameController.text,
+      "user_profile_type2": selectWorkTypeValue!.user_type2_id == 0
+          ? null
+          : selectWorkTypeValue!.user_type2_id,
+      "user_profile_zone_id":
+          selectZoneValue!.zoneId == 0 ? '' : selectZoneValue!.zoneId,
+      "user_profile_gender": _selectedGender == 'ชาย' ? "m" : "f",
+      "user_profile_birth_date": birthDate == toDay ? null : convertDate(),
+      "user_profile_facebook_id": facebookController.value.text.isEmpty ||
+              facebookController.value.text.trim().toString() == ""
+          ? null
+          : facebookController.text,
+      "user_profile_line_id": lineIdController.value.text.isEmpty ||
+              lineIdController.value.text.trim().toString() == ""
+          ? null
+          : lineIdController.text,
+      "user_profile_tel": phoneController.value.text.isEmpty ||
+              phoneController.value.text.trim().toString() == ""
+          ? null
+          : phoneController.text,
+      "user_profile_price": lowPriceController.value.text.isEmpty ||
+              lowPriceController.value.text.trim().toString() == ""
+          ? 0
+          : lowPriceController.text,
+      "user_profile_price2": heightPriceController.value.text.isEmpty ||
+              heightPriceController.value.text.trim().toString() == ""
+          ? 0
+          : heightPriceController.text,
+      "user_profile_about": aboutController.value.text.isEmpty ||
+              aboutController.value.text.trim().toString() == ""
+          ? null
+          : aboutController.text,
+      "work_id": work
+    };
+
+    print(data);
+    try {
+      Uri url = Uri.parse(Config.BASE_URL +
+          '/api/user/userprofile/update-profile'); //url on web
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode(data));
+      // print(widget.userId);
+      if (response.statusCode == 200) {
+        print(response.body);
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Update ข้อมูลสำเร็จ')));
+        Navigator.of(context).pop();
+        // toGetUserProfileData();
+      } else {
+        print(response.body);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Update ข้อมูลไม่สำเร็จ')));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  prepareShowData() {
+    displayNameController.text = userprofileList[0].userProfileName.toString();
+    lineIdController.text = userprofileList[0].userProfileLineId.toString();
+    facebookController.text =
+        userprofileList[0].userProfileFacebookId.toString();
+    phoneController.text = userprofileList[0].userProfileTel.toString();
+    _selectedGender =
+        userprofileList[0].userProfileGender == 'm' ? "ชาย" : "หญิง";
+    lowPriceController.text = userprofileList[0].userProfilePrice.toString();
+    heightPriceController.text =
+        userprofileList[0].userProfilePrice2.toString();
+    aboutController.text = userprofileList[0].userProfileAbout.toString();
+    /* birthDate = userprofileList[0].userProfileBirthDate == null
+        ? birthDate
+        : userprofileList[0].userProfileBirthDate as DateTime;*/
+     /* selectWorkTypeValue = (userprofileList[0].userProfileType2 == null
+        ? selectWorkTypeValue
+        : userprofileList[0].userProfileType2) as CareerTypeDataModel?;*/
   }
 
   @override
@@ -189,7 +277,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
     getDataZone();
     getDataExpertType();
     getDataWork();
-    // selectWorkTypeValue = selectionCareerList[0];
+    // prepareData();
   }
 
   @override
@@ -217,7 +305,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
               //  left: MediaQuery.of(context).size.width * 0.07,
               // right: MediaQuery.of(context).size.width * 0.07,
             ),
-            child: userprofileList.length == 0 && allWorkList.length == 0
+            child: userprofileList.length == 0 //&& allWorkList.length == 0
                 ? Center(
                     child: CircularProgressIndicator(
                       semanticsLabel: "กรุณารอสักครู",
@@ -232,20 +320,12 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                         Center(
                           child: ConstantWidget.getCustomTextWithoutAlign(
                               // S.of(context).editprofile,
-                              'แก้ไขโปรไฟล์ ผุ้เชี่ยวชาญ',
+                              'แก้ไขโปรไฟล์ ผู้เชี่ยวชาญ',
                               // Colors.black,
                               ConstantData.primaryColor,
                               FontWeight.w900,
                               32.0),
                         ),
-                       /* Center(
-                          child: ConstantWidget.getCustomTextWithoutAlign(
-                              S.of(context).editprofile,
-                              // Colors.black,
-                              ConstantData.primaryColor,
-                              FontWeight.w900,
-                              32.0),
-                        ),*/
                         Padding(
                           padding: EdgeInsets.only(
                             top: 20,
@@ -260,13 +340,13 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               height: editTextHeight,
                               width: 300,
                               child: TextFormField(
-                                validator: (value) {
+                                /*  validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Display name is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 1,
                                 controller: displayNameController,
                                 // controller:  S.of(context).documentNo.toString(),
@@ -307,7 +387,13 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
-                                  value: _selectedValue,
+                                  value: _selectedGender,
+                                  /* value: ConstantWidget
+                                          .getCustomTextWithoutAlign(
+                                          _selectedGender,
+                                              ConstantData.kGreyTextColor,
+                                              FontWeight.normal,
+                                              16.0),*/
                                   //isExpanded: true,
 
                                   icon: Icon(Icons.arrow_drop_down,
@@ -316,7 +402,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
 
                                   onChanged: (String? value) {
                                     setState(() {
-                                      _selectedValue = value!;
+                                      _selectedGender = value!;
                                     });
                                   },
 
@@ -352,11 +438,16 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                               CareerTypeDataModel>>(
                                       (CareerTypeDataModel value) {
                                     return DropdownMenuItem<
-                                        CareerTypeDataModel>(
-                                      value: value,
-                                      child: Text(
-                                          value.user_type2_name.toString()),
-                                    );
+                                            CareerTypeDataModel>(
+                                        value: value,
+                                        // child: Text(value.user_type2_name.toString()),
+                                        child: ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                value.user_type2_name
+                                                    .toString(),
+                                                ConstantData.kGreyTextColor,
+                                                FontWeight.normal,
+                                                16.0));
                                   }).toList(),
                                   onChanged: (CareerTypeDataModel? newValue) {
                                     setState(() {
@@ -425,16 +516,18 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                 onTap: () async {
                                   await showDatePicker(
                                     context: context,
-                                    initialDate: checkInDate,
+                                    initialDate: birthDate!,
                                     firstDate: DateTime.now(),
                                     lastDate: DateTime(2050),
                                   ).then((pickedDate) {
                                     if (pickedDate != null &&
-                                        pickedDate != checkInDate)
+                                        pickedDate != birthDate)
                                       setState(() {
-                                        checkInDate = pickedDate;
+                                        birthDate = pickedDate;
                                       });
                                   });
+
+                                  print(birthDate);
                                 },
                                 child: Row(
                                   children: [
@@ -443,8 +536,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                     ),
                                     Expanded(
                                       child: ConstantWidget.getCustomText(
-                                          DateFormat.yMMMd()
-                                              .format(checkInDate),
+                                          DateFormat.yMMMd().format(birthDate!),
                                           ConstantData.primaryTextColor,
                                           1,
                                           TextAlign.start,
@@ -477,15 +569,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               height: editTextHeight,
                               width: 300,
                               child: TextFormField(
-                                validator: (value) {
+                                /*validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Display name is Required';
+                                    return 'Line ID name is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 1,
-                                controller: displayNameController,
+                                controller: lineIdController,
                                 // controller:  S.of(context).documentNo.toString(),
                                 style: TextStyle(
                                     fontFamily: ConstantData.fontFamily,
@@ -514,15 +606,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               height: editTextHeight,
                               width: 300,
                               child: TextFormField(
-                                validator: (value) {
+                                /* validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Display name is Required';
+                                    return 'Facebook is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 1,
-                                controller: displayNameController,
+                                controller: facebookController,
                                 // controller:  S.of(context).documentNo.toString(),
                                 style: TextStyle(
                                     fontFamily: ConstantData.fontFamily,
@@ -551,15 +643,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               height: editTextHeight,
                               width: 300,
                               child: TextFormField(
-                                validator: (value) {
+                                /* validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Display name is Required';
+                                    return 'Phone is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 1,
-                                controller: displayNameController,
+                                controller: phoneController,
                                 // controller:  S.of(context).documentNo.toString(),
                                 style: TextStyle(
                                     fontFamily: ConstantData.fontFamily,
@@ -610,19 +702,31 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                       .map<DropdownMenuItem<LocationModel>>(
                                           (LocationModel value) {
                                     return DropdownMenuItem<LocationModel>(
-                                      value: value,
-                                      child: Text(value.zoneName.toString()),
-                                    );
+                                        value: value,
+                                        // child: Text(value.zoneName.toString()),
+                                        child: ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                value.zoneName.toString(),
+                                                ConstantData.kGreyTextColor,
+                                                FontWeight.normal,
+                                                16.0));
                                   }).toList(),
                                   onChanged: (LocationModel? newValue) {
                                     setState(() {
-                                      // dropdownValue = newValue;
+                                      /* dropdownValue = newValue;
                                       indexw =
                                           locationSelectList.indexOf(newValue!);
                                       print('----- value ------');
                                       print(dropdownValue!.zoneId.toString() +
                                           " " +
-                                          dropdownValue!.zoneName.toString());
+                                          dropdownValue!.zoneName.toString());*/
+
+                                      indexz =
+                                          locationSelectList.indexOf(newValue!);
+                                      print(indexz);
+                                      selectZoneValue = newValue;
+
+                                      print(selectZoneValue!.zoneName);
                                     });
                                   },
                                   /* hint: Text(
@@ -649,15 +753,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               height: editTextHeight,
                               width: 300,
                               child: TextFormField(
-                                validator: (value) {
+                                /*validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Display name is Required';
+                                    return 'Low Price is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 1,
-                                controller: displayNameController,
+                                controller: lowPriceController,
                                 // controller:  S.of(context).documentNo.toString(),
                                 style: TextStyle(
                                     fontFamily: ConstantData.fontFamily,
@@ -685,15 +789,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               height: editTextHeight,
                               width: 300,
                               child: TextFormField(
-                                validator: (value) {
+                                /* validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Display name is Required';
+                                    return 'Height Price is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 1,
-                                controller: displayNameController,
+                                controller: heightPriceController,
                                 // controller:  S.of(context).documentNo.toString(),
                                 style: TextStyle(
                                     fontFamily: ConstantData.fontFamily,
@@ -769,15 +873,15 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                               // height: 300,
                               // height: 100,
                               child: TextFormField(
-                                validator: (value) {
+                                /* validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Display name is Required';
+                                    return 'About is Required';
                                   }
 
                                   return null;
-                                },
+                                },*/
                                 maxLines: 10,
-                                controller: displayNameController,
+                                controller: aboutController,
                                 // controller:  S.of(context).documentNo.toString(),
                                 style: TextStyle(
                                     fontFamily: ConstantData.fontFamily,
@@ -869,17 +973,40 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                     return CheckboxListTile(
                                       controlAffinity:
                                           ListTileControlAffinity.leading,
-                                      
-                                       title: Text(
-                                        allWorkList2[index].data.workName.toString() 
-                                          
-                                      ),
-                                      
-                                      value:  allWorkList2[index].isSelected,
+
+                                      /* title: Text(
+                                        allWorkList2[index].data.workName.toString() ,*/
+
+                                      title: ConstantWidget
+                                          .getCustomTextWithoutAlign(
+                                              allWorkList2[index]
+                                                  .data
+                                                  .workName
+                                                  .toString(),
+                                              ConstantData.kGreyTextColor,
+                                              FontWeight.normal,
+                                              16.0),
+                                      value: allWorkList2[index].isSelected,
                                       onChanged: (val) {
                                         setState(
                                           () {
-                                            allWorkList2[index].isSelected = val!;
+                                            allWorkList2[index].isSelected =
+                                                val!;
+
+                                            if (allWorkList2[index]
+                                                    .isSelected ==
+                                                false) {
+                                              work.remove(allWorkList2[index]
+                                                  .data
+                                                  .workId
+                                                  .toString());
+                                            } else {
+                                              work.add(allWorkList2[index]
+                                                  .data
+                                                  .workId
+                                                  .toString());
+                                            }
+                                            print('work  ==> + $work');
                                           },
                                         );
                                       },
@@ -888,34 +1015,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                 ),
                               ),
 
-                              /*child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 30, right: 30),
-                                  child: ListView.builder(
-                                    itemCount: _data.length,
-                                    itemBuilder: (context, index) {
-                                      return CheckboxListTile(
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        // secondary: Icon(Icons.person),
-                                        title: Text(
-                                          _data[index].title +
-                                              " " +
-                                              (index + 1).toString(),
-                                        ),
-                                        
-                                        value: _data[index].isSelected,
-                                        onChanged: (val) {
-                                          setState(
-                                            () {
-                                              _data[index].isSelected = val!;
-                                            },
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),*/
+                            
                             ),
                           ],
                         ),
@@ -939,7 +1039,17 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
                                 ),
                               )),
                           onTap: () {
-                            // toSaveCustomeProfile();
+                          
+                            // ignore: unrelated_type_equality_checks
+                            if (selectZoneValue == null || selectZoneValue!.zoneId == 0 ||
+                               selectWorkTypeValue == null || selectWorkTypeValue!.user_type2_id == 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text('กรุณาเลือก โซน และ ประเภท ')));
+                            } else {
+                              saveExpertProfile();
+                            }
                           },
                         ),
                         Padding(

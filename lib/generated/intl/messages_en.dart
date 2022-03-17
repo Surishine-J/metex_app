@@ -89,7 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "group": MessageLookupByLibrary.simpleMessage("กลุ่ม"),
         "groupname": MessageLookupByLibrary.simpleMessage("ชื่อกลุ่ม"),
         "heightprice":
-            MessageLookupByLibrary.simpleMessage("ค่าใช้จ่ายขั้นต่ำ"),
+            MessageLookupByLibrary.simpleMessage("ค่าใช้จ่ายขั้นสูง"),
         "lineid": MessageLookupByLibrary.simpleMessage("LINE ID"),
         "login": MessageLookupByLibrary.simpleMessage("ลงชื่อเข้าใช้"),
         "logoutbutton": MessageLookupByLibrary.simpleMessage("ออกจากระบบ"),

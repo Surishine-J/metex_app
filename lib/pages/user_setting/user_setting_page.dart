@@ -149,7 +149,8 @@ class _UserSettingPageState extends State<UserSettingPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ExpertEditProfilePage( userId: userList[0].userId.toString(),
+            builder: (context) => ExpertEditProfilePage(
+                userId: userList[0].userId.toString(),
                 userName: userList[0].userUserId.toString(),
                 userType: userList[0].userType.toString()),
           ),
@@ -178,7 +179,19 @@ class _UserSettingPageState extends State<UserSettingPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ExpertProfilePage( userId: widget.userId,
+            builder: (context) => ExpertProfilePage(
+                userId: widget.userId,
+                userName: widget.userName,
+                userType: widget.userType),
+          ),
+        );
+      } else if (userList[0].userType == 'a') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AgencyEditProfilePage(
+                userList: userList,
+                userId: widget.userId,
                 userName: widget.userName,
                 userType: widget.userType),
           ),
@@ -1467,6 +1480,7 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                               ),
                                                             )),
                                                         onTap: () {
+                                                          toCheckMyProfilePageRoute();
                                                           // Navigator.pushNamed( context, '/editprofile');
                                                           /*Navigator.push(
                                                 context,
@@ -1779,6 +1793,7 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                                   ),
                                                                 )),
                                                             onTap: () {
+                                                              toCheckMyProfilePageRoute();
                                                               // Navigator.pushNamed(context, '/editprofile');
                                                               print(
                                                                   'You press MyProfile Button');
@@ -2098,22 +2113,24 @@ class _UserSettingPageState extends State<UserSettingPage> {
                                                                         )),
                                                                 onTap: () {
                                                                   // Navigator.pushNamed( context,   '/myprofile');
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => AgencyEditProfilePage(
-                                                                          userList:
-                                                                              userList,
-                                                                          userId: widget
-                                                                              .userId,
-                                                                          userName: widget
-                                                                              .userName,
-                                                                          userType:
-                                                                              widget.userType),
-                                                                    ),
-                                                                  );
+                                                                  // Navigator
+                                                                  //     .push(
+                                                                  //   context,
+                                                                  //   MaterialPageRoute(
+                                                                  //     builder: (context) => AgencyEditProfilePage(
+                                                                  //         userList:
+                                                                  //             userList,
+                                                                  //         userId: widget
+                                                                  //             .userId,
+                                                                  //         userName: widget
+                                                                  //             .userName,
+                                                                  //         userType:
+                                                                  //             widget.userType),
+                                                                  //   ),
+                                                                  // );
                                                                   //toCheckMyProfilePageRoute();
+
+                                                                  toCheckMyProfilePageRoute();
                                                                 },
                                                               ),
                                                               Padding(

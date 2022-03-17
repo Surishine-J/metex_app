@@ -62,12 +62,12 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
   List<CareerTypeDataModel> selectFilterCareerList = [];
 
   List<ExpertDetails> allExpertlist = [];
-List<ExpertDetails> craftsmanExpertList = [];
+  List<ExpertDetails> craftsmanExpertList = [];
   List<ExpertDetails> fruitExpertList = [];
   List<ExpertDetails> vegetableExpertList = [];
   List<ExpertDetails> carbonExpertList = [];
 
-List<WorkData> allWorkList = [];
+  List<WorkData> allWorkList = [];
   List<WorkData> workList = [];
   List<WorkData> craftsmanList = [];
   List<WorkData> fruitList = [];
@@ -81,7 +81,7 @@ List<WorkData> allWorkList = [];
 //  List<SubCategoryModel> subList = [];
   List<ExpertDetails> subList = [];
 
- getDataZone() async {
+  getDataZone() async {
     var response = await http.post(
       Uri.parse(Config.BASE_URL + '/api/zone/all'),
     );
@@ -261,9 +261,6 @@ List<WorkData> allWorkList = [];
     return null;
   }
 
- 
- 
-  
   sendDataToExpertDetailsPage(String user_profile_id) {
     print('user_profile_id =======>' + user_profile_id);
     setState(() {
@@ -536,10 +533,10 @@ List<WorkData> allWorkList = [];
                             FontWeight.normal,
                             18.0),
                       ),
-                     /* Padding(
+                      Padding(
                         padding: EdgeInsets.only(bottom: 20),
-                      ),*/
-                     /* GridView.count(
+                      ),
+                      GridView.count(
                         //ปุ่ม  filter 7 ปุ่ม
                         shrinkWrap: true,
                         primary: true,
@@ -554,172 +551,8 @@ List<WorkData> allWorkList = [];
                         crossAxisSpacing: _crossAxisSpacing2,
                         childAspectRatio: _aspectRatio2,
                         children: List.generate(
-                          filterList.length,
-                          (index) {
-                            // print( "sizes===$mainCatWidth==$mainCatHeight--$_aspectRatio");
-                            return InkWell(
-                              onTap: () {
-                                if (selectedFilterList != null &&
-                                    selectedFilterList
-                                        .contains(filterList[index])) {
-                                  selectedFilterList.remove(filterList[index]);
-                                } else {
-                                  selectedFilterList
-                                      .add(filterList[index].toString());
-                                }
-                                setState(() {
-                                  if (filterList[index].toString() ==
-                                      'Teambuilding') {
-                                    if (selectedFilterList != null &&
-                                        selectedFilterList
-                                            .contains(filterList[index])) {
-                                      can_team_building = 1;
-                                      print('can_team_building 1');
-                                      print(selectedFilterList);
-                                    } else {
-                                      can_team_building = 0;
-                                      print('can_team_building 0');
-                                      print(selectedFilterList);
-                                    }
-                                  }
-                                  if (filterList[index].toString() ==
-                                      'Leadership') {
-                                    if (selectedFilterList != null &&
-                                        selectedFilterList
-                                            .contains(filterList[index])) {
-                                      can_leadership = 1;
-                                      print('can_leadership 1');
-                                      print(selectedFilterList);
-                                    } else {
-                                      can_leadership = 0;
-                                      print('can_leadership 0');
-                                      print(selectedFilterList);
-                                    }
-                                  }
-                                  if (filterList[index].toString() ==
-                                      'Communication') {
-                                    if (selectedFilterList != null &&
-                                        selectedFilterList
-                                            .contains(filterList[index])) {
-                                      can_communication = 1;
-                                      print('can_communication 1');
-                                      print(selectedFilterList);
-                                    } else {
-                                      can_communication = 0;
-                                      print('can_communication 0');
-                                      print(selectedFilterList);
-                                    }
-                                  }
-                                  if (filterList[index].toString() ==
-                                      'Performance Management') {
-                                    if (selectedFilterList != null &&
-                                        selectedFilterList
-                                            .contains(filterList[index])) {
-                                      can_performance_management = 1;
-                                      print('can_performance_management 1');
-                                      print(selectedFilterList);
-                                    } else {
-                                      can_performance_management = 0;
-                                      print('can_performance_management 0');
-                                      print(selectedFilterList);
-                                    }
-                                  }
-                                  if (filterList[index].toString() ==
-                                      'career Growth') {
-                                    if (selectedFilterList != null &&
-                                        selectedFilterList
-                                            .contains(filterList[index])) {
-                                      can_career_growth = 1;
-                                      print('can_career_growth 1');
-                                      print(selectedFilterList);
-                                    } else {
-                                      can_career_growth = 0;
-                                      print('can_career_growth 0');
-                                      print(selectedFilterList);
-                                    }
-                                  }
-                                  if (filterList[index].toString() ==
-                                      'Mind set') {
-                                    if (selectedFilterList != null &&
-                                        selectedFilterList
-                                            .contains(filterList[index])) {
-                                      can_unn_unn = 1;
-                                      print('can_unn_unn 1');
-                                      print(selectedFilterList);
-                                    } else {
-                                      can_unn_unn = 0;
-                                      print('can_unn_unn 0');
-                                      print(selectedFilterList);
-                                    }
-                                  }
-                                });
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                // height: 200,
-                                height: cellHeight2,
-                                decoration: BoxDecoration(
-                                  // color: ConstantData.bgColor,
-                                  color: (selectedFilterList != null &&
-                                          selectedFilterList
-                                              .contains(filterList[index]))
-                                      ? ConstantData.primaryColor //accentColors
-                                      : ConstantData.bgColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(7)),
-                                  border: Border.all(
-                                      color: (selectedFilterList != null &&
-                                              selectedFilterList
-                                                  .contains(filterList[index]))
-                                          ? ConstantData
-                                              .primaryColor //accentColors
-                                          : ConstantData
-                                              .kGreyTextColor, //Colors.transparent,
-                                      width: 1),
-                                ),
-                                child: Center(
-                                  child: ConstantWidget.getCustomText(
-                                      // filterList[index].name,
-                                      filterList[index],
-                                      //ConstantData.textColor,
-                                      (selectedFilterList != null &&
-                                              selectedFilterList
-                                                  .contains(filterList[index]))
-                                          ? ConstantData
-                                              .whiteColor //accentColors
-                                          : ConstantData.kGreyTextColor,
-                                      1,
-                                      TextAlign.center,
-                                      FontWeight.bold,
-                                      ConstantWidget.getPercentSize1(
-                                          cellHeight2, 25)),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                       */
-                       Padding(
-                        padding: EdgeInsets.only(bottom: 20),
-                      ),
-                        GridView.count(
-                        //ปุ่ม  filter 7 ปุ่ม
-                        shrinkWrap: true,
-                        primary: true,
-                        mainAxisSpacing: _crossAxisSpacing2,
-                        padding: EdgeInsets.symmetric(
-                          vertical: cellMargin2,
-                          horizontal: cellMargin2 + _crossAxisSpacing2,
-                          // vertical: 50,
-                          // horizontal: 50,
-                        ),
-                        crossAxisCount: 5, //_crossAxisCount2,
-                        crossAxisSpacing: _crossAxisSpacing2,
-                        childAspectRatio: _aspectRatio2,
-                        children: List.generate(
-                         // allWorkList.length,
-                           checkFilterWork()!.length,
+                          // allWorkList.length,
+                          checkFilterWork()!.length,
                           (index) {
                             // print( "sizes===$mainCatWidth==$mainCatHeight--$_aspectRatio");
                             return InkWell(
@@ -728,17 +561,13 @@ List<WorkData> allWorkList = [];
                                     selectedFilterList
                                         .contains(workList[index])) {
                                   selectedFilterList.remove(workList[index]);
-                                   work.remove(
-                                        workList[index].workId.toString());
+                                  work.remove(
+                                      workList[index].workId.toString());
                                 } else {
-                                  selectedFilterList
-                                      .add(workList[index]);
-                                       work.add(
-                                        workList[index].workId.toString());
+                                  selectedFilterList.add(workList[index]);
+                                  work.add(workList[index].workId.toString());
                                 }
-                                setState(() {
-                                 
-                                });
+                                setState(() {});
                               },
                               child: Container(
                                 width: double.infinity,
@@ -785,7 +614,6 @@ List<WorkData> allWorkList = [];
                           },
                         ),
                       ),
-                      
                       Padding(
                         padding: EdgeInsets.only(bottom: 20),
                       ),
@@ -1066,17 +894,17 @@ List<WorkData> allWorkList = [];
                       Center(
                         child: ConstantWidget.getCustomTextWithoutAlign(
                             //  S.of(context).allexpert,
-                                // Colors.black,
-                                'พบ ผู้ให้บริการ  ' +
-                                    selectionCareerList[selectedPos]
-                                        .user_type2_name
-                                        .toString() +
-                                    "  " +
-                                    subList.length.toString() +
-                                    "  คน",
-                                ConstantData.primaryColor,
-                                FontWeight.w900,
-                                26.0),
+                            // Colors.black,
+                            'พบ ผู้ให้บริการ  ' +
+                                selectionCareerList[selectedPos]
+                                    .user_type2_name
+                                    .toString() +
+                                "  " +
+                                subList.length.toString() +
+                                "  คน",
+                            ConstantData.primaryColor,
+                            FontWeight.w900,
+                            26.0),
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 20),
@@ -1200,7 +1028,7 @@ List<WorkData> allWorkList = [];
                                                           .getCustomText(
                                                         //"ชาย",
                                                         _subCatModle.gender,
-                                                          
+
                                                         ConstantData.textColor,
                                                         1,
                                                         TextAlign.start,
@@ -1234,9 +1062,9 @@ List<WorkData> allWorkList = [];
                                                     child: Center(
                                                       child: ConstantWidget
                                                           .getCustomText(
-                                                           "฿ " +  _subCatModle.userProfilePrice,
-                                                       
-
+                                                        "฿ " +
+                                                            _subCatModle
+                                                                .userProfilePrice,
                                                         ConstantData.whiteColor,
                                                         1,
                                                         TextAlign.start,
@@ -1267,35 +1095,29 @@ List<WorkData> allWorkList = [];
                                               // color: Colors.blue,
                                               color: ConstantData.whiteColor,
                                               width: 1.0),
-                                         /* image: DecorationImage(
+                                          /* image: DecorationImage(
                                               image: AssetImage(
                                                   'assets/images/no-image.png'
                                                   /* ConstantData.assetsImagePath +
                                                 _subCatModle.image[0],*/
                                                   ),
                                               fit: BoxFit.cover),*/
-                                        image: _subCatModle
-                                                                .userProfileImage ==
-                                                            '0'
-                                                        ? DecorationImage(
-                                                            image: AssetImage(
-                                                                'assets/images/no-image.png'
-                                                                
-                                                                ),
-                                                            fit: BoxFit.cover)
-                                                        : DecorationImage(
-                                                            image: NetworkImage(
-                                                              
-                                                                Config.BASE_URL +
-                                                                    '/public/uploads/user-profile/' +
-                                                                    _subCatModle
-                                                                        .userProfileId
-                                                                        .toString() +
-                                                                    '/' +
-                                                                    _subCatModle
-                                                                        .userProfileImage),
-                                                            fit: BoxFit.cover),
-                                       
+                                          image: _subCatModle.userProfileImage ==
+                                                  '0'
+                                              ? DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/no-image.png'),
+                                                  fit: BoxFit.cover)
+                                              : DecorationImage(
+                                                  image: NetworkImage(Config
+                                                          .BASE_URL +
+                                                      '/public/uploads/user-profile/' +
+                                                      _subCatModle.userProfileId
+                                                          .toString() +
+                                                      '/' +
+                                                      _subCatModle
+                                                          .userProfileImage),
+                                                  fit: BoxFit.cover),
                                         ),
                                       ),
                                     ),
@@ -1332,6 +1154,7 @@ List<WorkData> allWorkList = [];
                                               padding: const EdgeInsets.only(
                                                   left: 4, right: 4),
                                               child: Row(
+                                                //mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   ConstantWidget.getCustomText(
                                                     // _subCatModle.name,
@@ -1345,18 +1168,39 @@ List<WorkData> allWorkList = [];
                                                         .getPercentSize1(
                                                             mainCatHeight, 8),
                                                   ),
-                                                  ConstantWidget.getSpace1(),
+
+                                                Responsive.isDesktop(context)? ConstantWidget.getSpace1():
+                                                   //ConstantWidget.getSpaceWidth(20),
+                                                   Spacer(flex: 1),
+
                                                   ConstantWidget.getCustomText(
-                                                    _subCatModle.zoneName,
-                                                      
-                                                      ConstantData.textColor,
-                                                      1,
-                                                      TextAlign.start,
-                                                      FontWeight.bold,
-                                                      ConstantWidget
-                                                          .getPercentSize1(
-                                                              mainCatHeight,
-                                                              8)),
+                                                          _subCatModle.zoneName,
+                                                          ConstantData
+                                                              .textColor,
+                                                          1,
+                                                          TextAlign.start,
+                                                          FontWeight.bold,
+                                                          ConstantWidget
+                                                              .getPercentSize1(
+                                                                  mainCatHeight,
+                                                                  8))
+                                                       /*Expanded(
+                                                          child: ConstantWidget
+                                                              .getCustomText(
+                                                                  _subCatModle
+                                                                      .zoneName,
+                                                                  ConstantData
+                                                                      .textColor,
+                                                                  1,
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  ConstantWidget
+                                                                      .getPercentSize1(
+                                                                          mainCatHeight,
+                                                                          8)),
+                                                        ),*/
                                                 ],
                                               ),
                                             ),
@@ -1367,8 +1211,8 @@ List<WorkData> allWorkList = [];
                                                 children: [
                                                   ConstantWidget.getCustomText(
                                                     S.of(context).age +
-                                                    _subCatModle.age.toString() +
-                                                       
+                                                        _subCatModle.age
+                                                            .toString() +
                                                         S.of(context).year,
                                                     // colorOrange,
                                                     ConstantData.textColor,
@@ -1396,7 +1240,6 @@ List<WorkData> allWorkList = [];
                                                     // _subCatModle.expertName
                                                     //"อาชีพ",
                                                     _subCatModle.workName,
-                                                   
 
                                                     // colorOrange,
                                                     // _subCatModle.userType2Name.toString(),
@@ -1425,8 +1268,9 @@ List<WorkData> allWorkList = [];
                                                               9)),
                                                   Icon(
                                                     Icons.star,
-                                                    color: _subCatModle.userProfileIsTopStar == 1
-                                                                
+                                                    color: _subCatModle
+                                                                .userProfileIsTopStar ==
+                                                            1
                                                         ? Colors.amber
                                                         : ConstantData
                                                             .kGreyTextColor,

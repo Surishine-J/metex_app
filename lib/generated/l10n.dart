@@ -750,10 +750,10 @@ class S {
     );
   }
 
-  /// `ค่าใช้จ่ายขั้นต่ำ`
+  /// `ค่าใช้จ่ายขั้นสูง`
   String get heightprice {
     return Intl.message(
-      'ค่าใช้จ่ายขั้นต่ำ',
+      'ค่าใช้จ่ายขั้นสูง',
       name: 'heightprice',
       desc: '',
       args: [],

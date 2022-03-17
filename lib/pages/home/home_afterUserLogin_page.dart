@@ -1199,20 +1199,37 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                     ),
                                                     ConstantWidget.getSpace1(),
                                                     ConstantWidget
-                                                        .getCustomText(
-                                                          _subCatModleTopStar
-                                                                        .zoneName,
-
-                                                           
-                                                            ConstantData
-                                                                .textColor,
-                                                            1,
-                                                            TextAlign.start,
-                                                            FontWeight.bold,
-                                                            ConstantWidget
-                                                                .getPercentSize1(
-                                                                    mainCatHeight,
-                                                                    8)),
+                                                          .getCustomText(
+                                                            _subCatModleTopStar
+                                                                          .zoneName,
+                                                    
+                                                             
+                                                              ConstantData
+                                                                  .textColor,
+                                                              1,
+                                                              TextAlign.start,
+                                                              FontWeight.bold,
+                                                              ConstantWidget
+                                                                  .getPercentSize1(
+                                                                      mainCatHeight,
+                                                                      8)),
+                                                    // Expanded(
+                                                    //   child: ConstantWidget
+                                                    //       .getCustomText(
+                                                    //         _subCatModleTopStar
+                                                    //                       .zoneName,
+                                                    
+                                                             
+                                                    //           ConstantData
+                                                    //               .textColor,
+                                                    //           1,
+                                                    //           TextAlign.start,
+                                                    //           FontWeight.bold,
+                                                    //           ConstantWidget
+                                                    //               .getPercentSize1(
+                                                    //                   mainCatHeight,
+                                                    //                   8)),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
@@ -1661,21 +1678,39 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                           ),
                                                           ConstantWidget
                                                               .getSpace1(),
-                                                          ConstantWidget
-                                                              .getCustomText(
-                                                                _subCatModleFavorite.zoneName,
-                                                                
-                                                                  ConstantData
-                                                                      .textColor,
-                                                                  1,
-                                                                  TextAlign
-                                                                      .start,
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  ConstantWidget
-                                                                      .getPercentSize1(
-                                                                          mainCatHeight,
-                                                                          8)),
+
+                                                              ConstantWidget
+                                                                .getCustomText(
+                                                                  _subCatModleFavorite.zoneName,
+                                                                  
+                                                                    ConstantData
+                                                                        .textColor,
+                                                                    1,
+                                                                    TextAlign
+                                                                        .start,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    ConstantWidget
+                                                                        .getPercentSize1(
+                                                                            mainCatHeight,
+                                                                            8)),
+                                                          // Expanded(
+                                                          //   child: ConstantWidget
+                                                          //       .getCustomText(
+                                                          //         _subCatModleFavorite.zoneName,
+                                                                  
+                                                          //           ConstantData
+                                                          //               .textColor,
+                                                          //           1,
+                                                          //           TextAlign
+                                                          //               .start,
+                                                          //           FontWeight
+                                                          //               .bold,
+                                                          //           ConstantWidget
+                                                          //               .getPercentSize1(
+                                                          //                   mainCatHeight,
+                                                          //                   8)),
+                                                          // ),
                                                         ],
                                                       ),
                                                     ),
@@ -2134,17 +2169,31 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                           .getPercentSize1(
                                                               mainCatHeight, 8),
                                                     ),
-                                                    ConstantWidget.getSpace1(),
-                                                    ConstantWidget.getCustomText(
-                                                        _subCatModle.zoneName,
-                                                        ConstantData.textColor,
-                                                        1,
-                                                        TextAlign.start,
-                                                        FontWeight.bold,
-                                                        ConstantWidget
-                                                            .getPercentSize1(
-                                                                mainCatHeight,
-                                                                8)),
+                                                   ConstantWidget.getSpace1(),
+                                                  //  ConstantWidget.getSpaceWidth(20),
+                                                   ConstantWidget.getCustomText(
+                                                          _subCatModle.zoneName,
+                                                          ConstantData.textColor,
+                                                          1,
+                                                          TextAlign.start,
+                                                          FontWeight.bold,
+                                                          ConstantWidget
+                                                              .getPercentSize1(
+                                                                  mainCatHeight,
+                                                                  8)),
+                                                    
+                                                    //  Expanded(
+                                                    //   child: ConstantWidget.getCustomText(
+                                                    //       _subCatModle.zoneName,
+                                                    //       ConstantData.textColor,
+                                                    //       1,
+                                                    //       TextAlign.start,
+                                                    //       FontWeight.bold,
+                                                    //       ConstantWidget
+                                                    //           .getPercentSize1(
+                                                    //               mainCatHeight,
+                                                    //               8)),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),

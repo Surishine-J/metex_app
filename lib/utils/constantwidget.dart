@@ -115,6 +115,11 @@ class ConstantWidget {
       height: space,
     );
   }
+  static Widget getSpaceWidth(double space) {
+    return SizedBox(
+      width: space,
+    );
+  }
 
   static Widget getSpace1() {
     return Spacer();

@@ -28,7 +28,6 @@ class ExpertDetailPage extends StatefulWidget {
 class _ExpertDetailPageState extends State<ExpertDetailPage> {
   List<ExpertDetails> allExpertlist = [];
   List<ExpertDetails> expertlist = [];
-  
 
   Future<bool> _requestPop() {
     Navigator.of(context).pop();
@@ -45,7 +44,6 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
   ];
   int selectedPos = 0;
 
- 
   toLogout(BuildContext context) async {
     // Create storage
     final storage = new FlutterSecureStorage();
@@ -62,7 +60,7 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
       if (response.statusCode == 200) {
         await storage.delete(key: 'loginUserToken');
         //print(response.body);
-       /* Navigator.push(
+        /* Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => AdminLoginPage(),
@@ -176,7 +174,7 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                     Padding(
+                      Padding(
                         padding: EdgeInsets.only(bottom: 10),
                       ),
                       Padding(
@@ -202,18 +200,21 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                         // color: Colors.blue,
                                         color: ConstantData.whiteColor,
                                         width: 1.0),
-                                    image: DecorationImage(
-                                        /* image: AssetImage(
-                                                // 'assets/images/image.jpg'
-                                                ConstantData.assetsImagePath +
-                                                    _subCatModle.image[0],
-                                              ),*/
-                                        image: AssetImage(
-                                            'assets/images/no-image.png'
-                                            // ConstantData.assetsImagePath +
-                                            // "profile/15/15-1615970522.jpg",
-                                            ),
-                                        fit: BoxFit.cover),
+                                    image: expertlist.length == 0
+                                        ? DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/no-image.png'),
+                                            fit: BoxFit.cover)
+                                        : DecorationImage(
+                                            image: NetworkImage(Config
+                                                    .BASE_URL +
+                                                '/public/uploads/user-profile/' +
+                                                expertlist[0]
+                                                    .userProfileId
+                                                    .toString() +
+                                                '/' +
+                                                expertlist[0].userProfileImage),
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(
@@ -231,26 +232,33 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                   width: 150,
                                   height: 150,
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(7.0)),
-                                    color: ConstantData.whiteColor,
-                                    border: Border.all(
-                                        // color: Colors.blue,
-                                        color: ConstantData.whiteColor,
-                                        width: 1.0),
-                                    image: DecorationImage(
-                                        /* image: AssetImage(
-                                                // 'assets/images/image.jpg'
-                                                ConstantData.assetsImagePath +
-                                                    _subCatModle.image[0],
-                                              ),*/
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(7.0)),
+                                      color: ConstantData.whiteColor,
+                                      border: Border.all(
+                                          // color: Colors.blue,
+                                          color: ConstantData.whiteColor,
+                                          width: 1.0),
+                                      /* image: DecorationImage(
                                         image: AssetImage(
-                                            'assets/images/no-image.png'
-                                            // ConstantData.assetsImagePath +
-                                            // "profile/15/15-1615970522.jpg",
-                                            ),
-                                        fit: BoxFit.cover),
-                                  ),
+                                            'assets/images/no-image.png'),
+                                        fit: BoxFit.cover),*/
+                                      image: expertlist.length == 0
+                                          ? DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/no-image.png'),
+                                              fit: BoxFit.cover)
+                                          : DecorationImage(
+                                              image: NetworkImage(Config
+                                                      .BASE_URL +
+                                                  '/public/uploads/user-profile/' +
+                                                  expertlist[0]
+                                                      .userProfileId
+                                                      .toString() +
+                                                  '/' +
+                                                  expertlist[0]
+                                                      .userProfileImage),
+                                              fit: BoxFit.cover)),
                                 ),
                               ],
                             ),
@@ -444,22 +452,21 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                     ),
                                     Column(
                                       children: [
-                                        ConstantWidget.getCustomTextWithoutAlign(
-                                            expertlist[0].gender,
-                                         
-                                            ConstantData.primaryColor,
-                                            FontWeight.normal,
-                                            16.0),
+                                        ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                expertlist[0].gender,
+                                                ConstantData.primaryColor,
+                                                FontWeight.normal,
+                                                16.0),
                                         Padding(
                                           padding: EdgeInsets.only(bottom: 5),
                                         ),
-                                        ConstantWidget.getCustomTextWithoutAlign(
-                                          
-                                          expertlist[0].age.toString(),
-                                           
-                                            ConstantData.primaryColor,
-                                            FontWeight.normal,
-                                            16.0),
+                                        ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                expertlist[0].age.toString(),
+                                                ConstantData.primaryColor,
+                                                FontWeight.normal,
+                                                16.0),
                                         Padding(
                                           padding: EdgeInsets.only(bottom: 5),
                                         ),
@@ -540,9 +547,7 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                         ),
                                         ConstantWidget
                                             .getCustomTextWithoutAlign(
-                                                expertlist[0]
-                                                    .lineId
-                                                    .toString(),
+                                                expertlist[0].lineId.toString(),
                                                 ConstantData.primaryColor,
                                                 FontWeight.normal,
                                                 16.0),
@@ -575,49 +580,93 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 20),
                                 ),
-                            /*     Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                child: Container(
-                                    //  margin: EdgeInsets.only(top: 20),
-                                    height: 50,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                        // color: ConstantData.blueColor,
-                                        color: Colors.pink,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8))),
-                                    child: InkWell(
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.favorite,
-                                              size: 16,
-                                              color: ConstantData.whiteColor,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                   /* InkWell(
+                                      child: Container(
+                                          //  margin: EdgeInsets.only(top: 20),
+                                          height: 50,
+                                          width: 200,
+                                          decoration: BoxDecoration(
+                                              // color: ConstantData.blueColor,
+                                              color: Colors.pink,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8))),
+                                          child: InkWell(
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.favorite,
+                                                    size: 16,
+                                                    color:
+                                                        ConstantData.whiteColor,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  ConstantWidget
+                                                      .getCustomTextWithoutAlign(
+                                                          'ถูกใจ',
+                                                          //  S.of(context).verified,
+                                                          Colors.white,
+                                                          FontWeight.w900,
+                                                          ConstantData
+                                                              .font15Px),
+                                                ],
+                                              ),
                                             ),
-                                            SizedBox(
-                                              width: 10,
+                                          )),
+                                      onTap: () {},
+                                    ),
+                                   
+                                   Padding(
+                                      padding: EdgeInsets.only(left: 10),),*/
+                                   InkWell(
+                                      child: Container(
+                                          //  margin: EdgeInsets.only(top: 20),
+                                          height: 50,
+                                          width: 200,
+                                          decoration: BoxDecoration(
+                                              // color: ConstantData.blueColor,
+                                              color:ConstantData.primaryColor,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8))),
+                                          child: InkWell(
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.shopping_cart,
+                                                    size: 20,
+                                                    color:
+                                                        ConstantData.whiteColor,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  ConstantWidget
+                                                      .getCustomTextWithoutAlign(
+                                                          'Audit',
+                                                          //  S.of(context).verified,
+                                                         ConstantData.whiteColor,
+                                                          FontWeight.w900,
+                                                          ConstantData
+                                                              .font15Px),
+                                                ],
+                                              ),
                                             ),
-                                            ConstantWidget
-                                                .getCustomTextWithoutAlign(
-                                                    'เพิ่มลงตะกร้า',
-                                                    //  S.of(context).verified,
-                                                    Colors.white,
-                                                    FontWeight.w900,
-                                                    ConstantData.font15Px),
-                                          ],
-                                        ),
-                                      ),
-                                    )),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                          */
+                                          )),
+                                      onTap: () {},
+                                    ),
+                                  
+                                  ],
+                                ),
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 40),
                                 ),
@@ -645,9 +694,7 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                     Flexible(
                                       child: ConstantWidget
                                           .getCustomTextWithoutAlign(
-                                              expertlist[0].about
-                                                  
-                                                  .toString(),
+                                              expertlist[0].about.toString(),
                                               ConstantData.primaryColor,
                                               FontWeight.w500,
                                               16.0),
