@@ -12,28 +12,10 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class SearchResultPage extends StatefulWidget {
-  late String search;
-  late int type2 = 0;
-  late int can_team_building = 0;
-  late int can_leadership = 0;
-  late int can_communication = 0;
-  late int can_performance_management = 0;
-  late int can_career_growth = 0;
-  late int can_mind_set = 0;
-  late int can_unn_unn = 0;
-  late int zone_id = 0;
+ 
   SearchResultPage({
     Key? key,
-    required this.search,
-    required this.type2,
-    required this.can_team_building,
-    required this.can_leadership,
-    required this.can_communication,
-    required this.can_performance_management,
-    required this.can_career_growth,
-    required this.can_mind_set,
-    required this.can_unn_unn,
-    required this.zone_id,
+    
   }) : super(key: key);
 
   @override
@@ -61,61 +43,19 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
   var search;
   var type2;
-  var can_team_building;
-  var can_leadership;
-  var can_communication;
-  var can_performance_management;
-  var can_career_growth;
-  var can_mind_set;
-  var can_unn_unn;
-  var zone_id;
+
 
   checkFiltterSelect() {
-    if (widget.search == '') {
-      search = null;
-    }
-    if (widget.type2 == 0) {
-      type2 == null;
-    }
-    if (widget.can_team_building == 0) {
-      can_team_building == null;
-    }
-    if (widget.can_leadership == 0) {
-      can_leadership == null;
-    }
-    if (widget.can_communication == 0) {
-      can_communication == null;
-    }
-    if (widget.can_performance_management == 0) {
-      can_performance_management == null;
-    }
-    if (widget.can_career_growth == 0) {
-      can_career_growth == null;
-    }
-    if (widget.can_mind_set == 0) {
-      can_mind_set == null;
-    }
-    if (widget.can_unn_unn == 0) {
-      can_unn_unn == null;
-    }
-    if (widget.zone_id == 0) {
-      zone_id == null;
-    }
+   
+
   }
 
   getDataExpertAll() async {
     var data = {
       "user_id": null,
       "search": search,
-      "type2": type2,
-      "can_team_building": can_team_building,
-      "can_leadership": can_leadership,
-      "can_communication": can_communication,
-      "can_performance_management": can_performance_management,
-      "can_career_growth": can_career_growth,
-      "can_mind_set": can_mind_set,
-      "can_unn_unn": can_unn_unn,
-      "zone_id": zone_id
+      "type2": type2,   
+      
     };
     Uri url = Uri.parse(Config.BASE_URL + '/api/user/search/all');
     var response = await http.post(url,

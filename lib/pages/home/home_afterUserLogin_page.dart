@@ -294,16 +294,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
         context,
         MaterialPageRoute(
             builder: (context) => SearchResultPage(
-                  search: search,
-                  type2: type2,
-                  can_team_building: can_team_building,
-                  can_leadership: can_leadership,
-                  can_communication: can_communication,
-                  can_performance_management: can_performance_management,
-                  can_career_growth: can_career_growth,
-                  can_mind_set: can_mind_set,
-                  can_unn_unn: can_unn_unn,
-                  zone_id: zone_id,
+                 
                 )));
   }
 
