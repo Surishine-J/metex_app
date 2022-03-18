@@ -56,6 +56,10 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
   List<ExpertDetails> subListFavorite = [];
   List<ExpertDetails> subListTopStar = [];
 
+  int indexz = 0;
+   LocationModel? selectZoneValue;
+
+
   Future<bool> _requestPop() {
     Navigator.of(context).pop();
     return new Future.value(false);
@@ -74,15 +78,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
     // DataFile.getWineModel(),
     DataFile.getAllExpertModel()
   ];
-//  List<SubCategoryModel> subList = [];
-  // List<ExpertModel> subList = [];
 
-  List<String> selectionList = [
-    // "ทั้งหมด",
-    "Coach",
-    "Trainer",
-    "Consultant",
-  ];
 
   late String _selectedValue = 'ชาย';
   List<DropdownMenuItem<String>> items = [
@@ -100,6 +96,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
 
   int selectedCareer = 0;
   int selectedPos = 0;
+ 
   // TextEditingController emailController = new TextEditingController();
 
   TextEditingController emailController = new TextEditingController();
@@ -134,10 +131,10 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
           ZoneModel.fromJson(convert.jsonDecode(response.body));
       setState(() {
         location = zoneModel.data;
-        /* locationSelectList
+         locationSelectList
             .add(LocationModel(zoneId: 0, zoneName: "เลือกโซน", zoneOrder: 0));
         locationSelectList.addAll(location);
-        dropdownValue = locationSelectList[0];*/
+        //dropdownValue = locationSelectList[0];
       });
     } else {
       print('Error');
@@ -690,46 +687,159 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                         Padding(
                           padding: EdgeInsets.only(bottom: 20),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              //margin: EdgeInsets.only(bottom: 10, top: 10),
-                              height: editTextHeight,
-                              width: 300,
-                              child: TextField(
-                                maxLines: 1,
-                                controller: emailController,
-                                // controller:  S.of(context).documentNo.toString(),
-                                style: TextStyle(
-                                    fontFamily: ConstantData.fontFamily,
-                                    color: ConstantData.primaryTextColor,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 14),
+                        Responsive.isTablet(context) ||
+                              Responsive.isDesktop(context)
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  //margin: EdgeInsets.only(bottom: 10, top: 10),
+                                  height: editTextHeight,
+                                  width: 300,
+                                  child: TextField(
+                                    maxLines: 1,
+                                    controller: searchController,
+                                    // controller:  S.of(context).documentNo.toString(),
+                                    style: TextStyle(
+                                        fontFamily: ConstantData.fontFamily,
+                                        color: ConstantData.primaryTextColor,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14),
 
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 25.0, horizontal: 10.0),
-                                  // floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  border: OutlineInputBorder(
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(5),
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 25.0, horizontal: 10.0),
+                                      // floatingLabelBehavior: FloatingLabelBehavior.always,
+                                      border: OutlineInputBorder(
+                                        borderRadius: const BorderRadius.all(
+                                          const Radius.circular(5),
+                                        ),
+                                      ),
+                                      // border: InputBorder.none,
+                                      // labelText: S.of(context).searchbyname,
+                                      hintText: S.of(context).searchbyname,
                                     ),
                                   ),
-                                  // border: InputBorder.none,
-                                  // labelText: S.of(context).searchbyname,
-                                  hintText: S.of(context).searchbyname,
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
+                                SizedBox(
+                                  width: 20,
+                                ),
+
+                                /*  Container(
+                                  // height: 40.0,
+                                  height: editTextHeight,
+                                  padding:
+                                      EdgeInsets.only(left: 100, right: 100),
+
+                                  decoration: BoxDecoration(
+                                    color: ConstantData.bgColor,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                        color: ConstantData.kGreyTextColor),
+                                    /* border: Border.all(
+                                color: ConstantData.lightGrey, width: .5),*/
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<LocationModel>(
+                                      value: dropdownValue,
+                                      //isExpanded: true,
+                                      icon: Icon(Icons.arrow_drop_down,
+                                          color: Colors.grey.withOpacity(0.7)),
+                                      // items: items,
+                                      items: location
+                                          .map<DropdownMenuItem<LocationModel>>(
+                                              (LocationModel value) {
+                                        return DropdownMenuItem<LocationModel>(
+                                          value: value,
+                                          child:
+                                              Text(value.zoneName.toString()),
+                                        );
+                                      }).toList(),
+                                      onChanged: (LocationModel? newValue) {
+                                        setState(() {
+                                          dropdownValue = newValue;
+                                          print('----- value ------');
+                                          print(
+                                              dropdownValue!.zoneId.toString() +
+                                                  " " +
+                                                  dropdownValue!.zoneName
+                                                      .toString());
+                                        });
+                                      },
+                                      hint: Text(
+                                        "------- โซน -------",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      // value: _selectedValue,
+                                    ),
+                                  ),
+                                ),
+                                // ConstantWidget.getSpace1(),
+                              */
+
+                              /*  Container(
+                                  // height: 40.0,
+                                  height: editTextHeight,
+                                  // padding: EdgeInsets.only(left: 100, right: 100),
+                                  width: 305,
+
+                                  decoration: BoxDecoration(
+                                    color: ConstantData.bgColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        color: ConstantData.kGreyTextColor),
+                                    /* border: Border.all(
+                                color: ConstantData.lightGrey, width: .5),*/
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<LocationModel>(
+                                      value: dropdownValue,
+                                      //isExpanded: true,
+                                      icon: Icon(Icons.arrow_drop_down,
+                                          color: Colors.grey.withOpacity(0.7)),
+                                      // items: items,
+                                      items: location
+                                          .map<DropdownMenuItem<LocationModel>>(
+                                              (LocationModel value) {
+                                        return DropdownMenuItem<LocationModel>(
+                                          value: value,
+                                          child:
+                                              Text(value.zoneName.toString()),
+                                        );
+                                      }).toList(),
+                                      onChanged: (LocationModel? newValue) {
+                                        setState(() {
+                                          dropdownValue = newValue;
+                                          print('----- value ------');
+                                          print(
+                                              dropdownValue!.zoneId.toString() +
+                                                  " " +
+                                                  dropdownValue!.zoneName
+                                                      .toString());
+                                        });
+                                      },
+                                      /* hint: Text(
+                                        "------- โซน -------",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),*/
+                                      // value: _selectedValue,
+                                    ),
+                                  ),
+                                ),
+                              */
+                            
+                             Container(
                               // height: 40.0,
                               height: editTextHeight,
-                              // padding: EdgeInsets.only(left: 100, right: 100),
-                              width: 305,
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              width: 300,
 
                               decoration: BoxDecoration(
                                 color: ConstantData.bgColor,
@@ -741,43 +851,162 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<LocationModel>(
-                                  value: dropdownValue,
+                                  // value: dropdownValue,
+                                  value: locationSelectList[indexz],
                                   //isExpanded: true,
-
                                   icon: Icon(Icons.arrow_drop_down,
                                       color: Colors.grey.withOpacity(0.7)),
                                   // items: items,
-                                  items: location
+                                  // items: location
+                                  items: locationSelectList
                                       .map<DropdownMenuItem<LocationModel>>(
                                           (LocationModel value) {
                                     return DropdownMenuItem<LocationModel>(
-                                      value: value,
-                                      child: Text(value.zoneName.toString()),
-                                    );
+                                        value: value,
+                                        // child: Text(value.zoneName.toString()),
+                                        child: ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                value.zoneName.toString(),
+                                                ConstantData.kGreyTextColor,
+                                                FontWeight.normal,
+                                                16.0));
                                   }).toList(),
                                   onChanged: (LocationModel? newValue) {
                                     setState(() {
-                                      dropdownValue = newValue;
+                                      /* dropdownValue = newValue;
+                                      indexw =
+                                          locationSelectList.indexOf(newValue!);
                                       print('----- value ------');
                                       print(dropdownValue!.zoneId.toString() +
                                           " " +
-                                          dropdownValue!.zoneName.toString());
+                                          dropdownValue!.zoneName.toString());*/
+
+                                      indexz =
+                                          locationSelectList.indexOf(newValue!);
+                                      print(indexz);
+                                      selectZoneValue = newValue;
+
+                                      print(selectZoneValue!.zoneName);
                                     });
                                   },
-                                  hint: Text(
+                                  /* hint: Text(
                                     "------- โซน -------",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
-                                  ),
+                                  ),*/
                                   // value: _selectedValue,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        InkWell(
+                         
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Container(
+                                  //margin: EdgeInsets.only(bottom: 10, top: 10),
+                                  height: editTextHeight,
+                                  width: 300,
+                                  child: TextField(
+                                    maxLines: 1,
+                                    controller: searchController,
+                                    // controller:  S.of(context).documentNo.toString(),
+                                    style: TextStyle(
+                                        fontFamily: ConstantData.fontFamily,
+                                        color: ConstantData.primaryTextColor,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14),
+
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 25.0, horizontal: 10.0),
+                                      // floatingLabelBehavior: FloatingLabelBehavior.always,
+                                      border: OutlineInputBorder(
+                                        borderRadius: const BorderRadius.all(
+                                          const Radius.circular(5),
+                                        ),
+                                      ),
+                                      // border: InputBorder.none,
+                                      // labelText: S.of(context).searchbyname,
+                                      hintText: S.of(context).searchbyname,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                               Container(
+                              // height: 40.0,
+                              height: editTextHeight,
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              width: 300,
+
+                              decoration: BoxDecoration(
+                                color: ConstantData.bgColor,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                    color: ConstantData.kGreyTextColor),
+                                /* border: Border.all(
+                                color: ConstantData.lightGrey, width: .5),*/
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<LocationModel>(
+                                  // value: dropdownValue,
+                                  value: locationSelectList[indexz],
+                                  //isExpanded: true,
+                                  icon: Icon(Icons.arrow_drop_down,
+                                      color: Colors.grey.withOpacity(0.7)),
+                                  // items: items,
+                                  // items: location
+                                  items: locationSelectList
+                                      .map<DropdownMenuItem<LocationModel>>(
+                                          (LocationModel value) {
+                                    return DropdownMenuItem<LocationModel>(
+                                        value: value,
+                                        // child: Text(value.zoneName.toString()),
+                                        child: ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                value.zoneName.toString(),
+                                                ConstantData.kGreyTextColor,
+                                                FontWeight.normal,
+                                                16.0));
+                                  }).toList(),
+                                  onChanged: (LocationModel? newValue) {
+                                    setState(() {
+                                      /* dropdownValue = newValue;
+                                      indexw =
+                                          locationSelectList.indexOf(newValue!);
+                                      print('----- value ------');
+                                      print(dropdownValue!.zoneId.toString() +
+                                          " " +
+                                          dropdownValue!.zoneName.toString());*/
+
+                                      indexz =
+                                          locationSelectList.indexOf(newValue!);
+                                      print(indexz);
+                                      selectZoneValue = newValue;
+
+                                      print(selectZoneValue!.zoneName);
+                                    });
+                                  },
+                                  /* hint: Text(
+                                    "------- โซน -------",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),*/
+                                  // value: _selectedValue,
+                                ),
+                              ),
+                            ),
+                         
+                              ],
+                            ),
+                      InkWell(
                           child: Container(
                               width: 300,
                               margin: EdgeInsets.only(top: 20),

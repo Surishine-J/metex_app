@@ -80,6 +80,10 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
 
 //  List<SubCategoryModel> subList = [];
   List<ExpertDetails> subList = [];
+   int indexz = 0;
+   LocationModel? selectZoneValue;
+
+  List<WorkData> selectedFilterList = [];
 
   getDataZone() async {
     var response = await http.post(
@@ -90,10 +94,10 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
           ZoneModel.fromJson(convert.jsonDecode(response.body));
       setState(() {
         location = zoneModel.data;
-        /*  locationSelectList
+        locationSelectList
             .add(LocationModel(zoneId: 0, zoneName: "เลือกโซน", zoneOrder: 0));
         locationSelectList.addAll(location);
-        dropdownValue = locationSelectList[0];*/
+        
       });
     } else {
       print('Error');
@@ -335,9 +339,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
 
   // List<ZoneModel> _categoryList = <ZoneModel>[];
 
-  LocationModel? dropdownValue;
-
-  List<WorkData> selectedFilterList = [];
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -711,7 +713,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                 // ConstantWidget.getSpace1(),
                               */
 
-                                Container(
+                              /*  Container(
                                   // height: 40.0,
                                   height: editTextHeight,
                                   // padding: EdgeInsets.only(left: 100, right: 100),
@@ -763,6 +765,74 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                     ),
                                   ),
                                 ),
+                              */
+                            
+                             Container(
+                              // height: 40.0,
+                              height: editTextHeight,
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              width: 300,
+
+                              decoration: BoxDecoration(
+                                color: ConstantData.bgColor,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                    color: ConstantData.kGreyTextColor),
+                                /* border: Border.all(
+                                color: ConstantData.lightGrey, width: .5),*/
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<LocationModel>(
+                                  // value: dropdownValue,
+                                  value: locationSelectList[indexz],
+                                  //isExpanded: true,
+                                  icon: Icon(Icons.arrow_drop_down,
+                                      color: Colors.grey.withOpacity(0.7)),
+                                  // items: items,
+                                  // items: location
+                                  items: locationSelectList
+                                      .map<DropdownMenuItem<LocationModel>>(
+                                          (LocationModel value) {
+                                    return DropdownMenuItem<LocationModel>(
+                                        value: value,
+                                        // child: Text(value.zoneName.toString()),
+                                        child: ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                value.zoneName.toString(),
+                                                ConstantData.kGreyTextColor,
+                                                FontWeight.normal,
+                                                16.0));
+                                  }).toList(),
+                                  onChanged: (LocationModel? newValue) {
+                                    setState(() {
+                                      /* dropdownValue = newValue;
+                                      indexw =
+                                          locationSelectList.indexOf(newValue!);
+                                      print('----- value ------');
+                                      print(dropdownValue!.zoneId.toString() +
+                                          " " +
+                                          dropdownValue!.zoneName.toString());*/
+
+                                      indexz =
+                                          locationSelectList.indexOf(newValue!);
+                                      print(indexz);
+                                      selectZoneValue = newValue;
+
+                                      print(selectZoneValue!.zoneName);
+                                    });
+                                  },
+                                  /* hint: Text(
+                                    "------- โซน -------",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),*/
+                                  // value: _selectedValue,
+                                ),
+                              ),
+                            ),
+                         
                               ],
                             )
                           : Column(
@@ -800,59 +870,72 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Container(
-                                  // height: 40.0,
-                                  height: editTextHeight,
-                                  // padding: EdgeInsets.only(left: 100, right: 100),
-                                  width: 305,
+                               Container(
+                              // height: 40.0,
+                              height: editTextHeight,
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              width: 300,
 
-                                  decoration: BoxDecoration(
-                                    color: ConstantData.bgColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: ConstantData.kGreyTextColor),
-                                    /* border: Border.all(
+                              decoration: BoxDecoration(
+                                color: ConstantData.bgColor,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                    color: ConstantData.kGreyTextColor),
+                                /* border: Border.all(
                                 color: ConstantData.lightGrey, width: .5),*/
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<LocationModel>(
-                                      value: dropdownValue,
-                                      //isExpanded: true,
-                                      icon: Icon(Icons.arrow_drop_down,
-                                          color: Colors.grey.withOpacity(0.7)),
-                                      // items: items,
-                                      items: location
-                                          //items:locationSelectList
-                                          .map<DropdownMenuItem<LocationModel>>(
-                                              (LocationModel value) {
-                                        return DropdownMenuItem<LocationModel>(
-                                          value: value,
-                                          child:
-                                              Text(value.zoneName.toString()),
-                                        );
-                                      }).toList(),
-                                      onChanged: (LocationModel? newValue) {
-                                        setState(() {
-                                          dropdownValue = newValue;
-                                          print('----- value ------');
-                                          print(
-                                              dropdownValue!.zoneId.toString() +
-                                                  " " +
-                                                  dropdownValue!.zoneName
-                                                      .toString());
-                                        });
-                                      },
-                                      hint: Text(
-                                        "------- โซน -------",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      // value: _selectedValue,
-                                    ),
-                                  ),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<LocationModel>(
+                                  // value: dropdownValue,
+                                  value: locationSelectList[indexz],
+                                  //isExpanded: true,
+                                  icon: Icon(Icons.arrow_drop_down,
+                                      color: Colors.grey.withOpacity(0.7)),
+                                  // items: items,
+                                  // items: location
+                                  items: locationSelectList
+                                      .map<DropdownMenuItem<LocationModel>>(
+                                          (LocationModel value) {
+                                    return DropdownMenuItem<LocationModel>(
+                                        value: value,
+                                        // child: Text(value.zoneName.toString()),
+                                        child: ConstantWidget
+                                            .getCustomTextWithoutAlign(
+                                                value.zoneName.toString(),
+                                                ConstantData.kGreyTextColor,
+                                                FontWeight.normal,
+                                                16.0));
+                                  }).toList(),
+                                  onChanged: (LocationModel? newValue) {
+                                    setState(() {
+                                      /* dropdownValue = newValue;
+                                      indexw =
+                                          locationSelectList.indexOf(newValue!);
+                                      print('----- value ------');
+                                      print(dropdownValue!.zoneId.toString() +
+                                          " " +
+                                          dropdownValue!.zoneName.toString());*/
+
+                                      indexz =
+                                          locationSelectList.indexOf(newValue!);
+                                      print(indexz);
+                                      selectZoneValue = newValue;
+
+                                      print(selectZoneValue!.zoneName);
+                                    });
+                                  },
+                                  /* hint: Text(
+                                    "------- โซน -------",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),*/
+                                  // value: _selectedValue,
                                 ),
+                              ),
+                            ),
+                         
                               ],
                             ),
                       InkWell(
