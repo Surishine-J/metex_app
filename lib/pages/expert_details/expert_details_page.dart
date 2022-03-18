@@ -260,8 +260,27 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                                       .userProfileImage),
                                               fit: BoxFit.cover)),
                                 ),
+                                /*Container(
+                                  child: new GridView.count(
+                                    crossAxisCount: 4,
+                                    children:
+                                        new List<Widget>.generate(16, (index) {
+                                      return new GridTile(
+                                        child: new Card(
+                                            color: Colors.blue.shade200,
+                                            child: new Center(
+                                              child: new Text('tile $index'),
+                                            )),
+                                      );
+                                    }),
+                                  ),
+                                )*/
                               ],
+
+                            
                             ),
+
+                         
                           ),
                           Container(
                             height: 2300,
@@ -484,7 +503,7 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                         ConstantWidget
                                             .getCustomTextWithoutAlign(
                                                 expertlist[0]
-                                                    .workName
+                                                    .userType2Name
                                                     .toString(),
                                                 ConstantData.primaryColor,
                                                 FontWeight.normal,
@@ -583,7 +602,7 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                   /* InkWell(
+                                    /* InkWell(
                                       child: Container(
                                           //  margin: EdgeInsets.only(top: 20),
                                           height: 50,
@@ -625,14 +644,14 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                    
                                    Padding(
                                       padding: EdgeInsets.only(left: 10),),*/
-                                   InkWell(
+                                    InkWell(
                                       child: Container(
                                           //  margin: EdgeInsets.only(top: 20),
                                           height: 50,
                                           width: 200,
                                           decoration: BoxDecoration(
                                               // color: ConstantData.blueColor,
-                                              color:ConstantData.primaryColor,
+                                              color: ConstantData.primaryColor,
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(8))),
                                           child: InkWell(
@@ -654,7 +673,8 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                                       .getCustomTextWithoutAlign(
                                                           'Audit',
                                                           //  S.of(context).verified,
-                                                         ConstantData.whiteColor,
+                                                          ConstantData
+                                                              .whiteColor,
                                                           FontWeight.w900,
                                                           ConstantData
                                                               .font15Px),
@@ -664,7 +684,6 @@ class _ExpertDetailPageState extends State<ExpertDetailPage> {
                                           )),
                                       onTap: () {},
                                     ),
-                                  
                                   ],
                                 ),
                                 Padding(

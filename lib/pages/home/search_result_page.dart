@@ -167,7 +167,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   @override
   void initState() {
     super.initState();
-    checkFiltterSelect();
+    //checkFiltterSelect();
     getDataExpertAll();
   }
 
@@ -276,213 +276,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                             (index) {
                               // print( "sizes===$mainCatWidth==$mainCatHeight--$_aspectRatio");
                               ExpertDetails _subCatModle = subList[index];
-                              /* return InkWell(
-                          /*onTap: () {
-                                  if (selectedFilterList != null &&
-                                      selectedFilterList
-                                          .contains(filterList[index])) {
-                                    selectedFilterList.remove(filterList[index]);
-                                  } else {
-                                    selectedFilterList.add(filterList[index]);
-                                  }
-                                  setState(() {});
-                                },*/
-                          child: Container(
-                            width: double.infinity,
-                            height: cellHeight2,
-                            child: Column(
-                              children: [
-                                AspectRatio(
-                                  aspectRatio: 1.0,
-                                  child: Container(
-                                    // color: Colors.green,
-                                    child: Align(
-                                      alignment: Alignment.topRight,
-                                      child: Container(
-                                        padding: EdgeInsets.all(0),
-                                        decoration: BoxDecoration(
-                                            color: ConstantData.whiteColor,
-                                            borderRadius:
-                                                BorderRadius.circular(100)),
-                                        /* child: Icon(
-                                            Icons.favorite_border_rounded,
-                                            color: Colors.white,
-                                          ),*/
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.favorite_border_rounded,
-                                          ),
-                                          iconSize: 20,
-                                          color: ConstantData.kGreyTextColor,
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    ),
-
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(7),
-                                          topRight: Radius.circular(7)),
-                                      color: ConstantData.whiteColor,
-                                      border: Border.all(
-                                          // color: Colors.blue,
-                                          color: ConstantData.whiteColor,
-                                          width: 1.0),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                             'assets/images/no-image.jpg'
-                                            /*ConstantData.assetsImagePath +
-                                                _subCatModle.image[0],*/
-                                          ),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                ),
-                                AspectRatio(
-                                  aspectRatio: 2.5,
-                                  child: Container(
-                                    // height: 150,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(7),
-                                          bottomRight: Radius.circular(7),
-                                        ),
-                                        color: ConstantData.whiteColor,
-                                        border: Border.all(
-                                            // color: Colors.yellow,
-                                            color: ConstantData.whiteColor,
-                                            width: 1.0)),
-                                    //child: Text('Item ${index}'),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                        ),
-                                        /* ConstantWidget.getSpace(
-                                                        ConstantWidget.getPercentSize1(
-                                                            mainCatHeight, 2.5)),*/
-                                        Row(
-                                          children: [
-                                            ConstantWidget.getCustomText(
-                                              //_subCatModle.gender,
-                                              _subCatModle.userProfileGender,
-                                              ConstantData.textColor,
-                                              1,
-                                              TextAlign.start,
-                                              FontWeight.bold,
-                                              ConstantWidget.getPercentSize1(
-                                                  mainCatHeight, 8),
-                                            ),
-                                            ConstantWidget.getSpace1(),
-                                            ConstantWidget.getCustomText(
-                                               // _subCatModle.salary + " " + "฿",
-                                               _subCatModle.userProfilePrice.toString()
-                                                ConstantData.textColor,
-                                                1,
-                                                TextAlign.start,
-                                                FontWeight.bold,
-                                                ConstantWidget.getPercentSize1(
-                                                    mainCatHeight, 8)),
-                                          ],
-                                        ),
-                                        /* Padding(
-                                            padding: EdgeInsets.only(bottom: 20),
-                                          ),*/
-                                        /* ConstantWidget.getSpace(
-                                                        ConstantWidget.getPercentSize1(
-                                                            mainCatHeight, 2.5)),*/
-                                        Row(
-                                          children: [
-                                            ConstantWidget.getCustomText(
-                                              _subCatModle.name,
-                                              ConstantData.textColor,
-                                              1,
-                                              TextAlign.start,
-                                              FontWeight.bold,
-                                              ConstantWidget.getPercentSize1(
-                                                  mainCatHeight, 8),
-                                            ),
-                                            ConstantWidget.getSpace1(),
-                                            ConstantWidget.getCustomText(
-                                                _subCatModle.province,
-                                                ConstantData.textColor,
-                                                1,
-                                                TextAlign.start,
-                                                FontWeight.bold,
-                                                ConstantWidget.getPercentSize1(
-                                                    mainCatHeight, 8)),
-                                          ],
-                                        ),
-                                        /* ConstantWidget.getSpace(
-                                                          ConstantWidget
-                                                              .getPercentSize1(
-                                                                  mainCatHeight, 1.2)),*/
-                                        ConstantWidget.getCustomText(
-                                          S.of(context).age +
-                                              _subCatModle.age.toString() +
-                                              S.of(context).year,
-                                          // colorOrange,
-                                          ConstantData.textColor,
-                                          1,
-                                          TextAlign.start,
-                                          FontWeight.normal,
-                                          ConstantWidget.getPercentSize1(
-                                              mainCatHeight, 8),
-                                        ),
-                                        Row(
-                                          children: [
-                                            ConstantWidget.getSpace(
-                                                ConstantWidget.getPercentSize1(
-                                                    mainCatHeight, 1.2)),
-                                            ConstantWidget.getCustomText(
-                                              _subCatModle.expertName
-                                                  .toString(),
-
-                                              // colorOrange,
-                                              ConstantData.textColor,
-                                              1,
-                                              TextAlign.start,
-                                              FontWeight.normal,
-                                              ConstantWidget.getPercentSize1(
-                                                  mainCatHeight, 8),
-                                            ),
-                                            ConstantWidget.getSpace1(),
-                                            ConstantWidget.getCustomText(
-                                                _subCatModle.reviewDesc,
-                                                ConstantData.textColor,
-                                                1,
-                                                TextAlign.center,
-                                                FontWeight.w100,
-                                                ConstantWidget.getPercentSize(
-                                                    bottomRemainSize, 9)),
-                                            Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                              size: 16,
-                                            ),
-                                            Icon(
-                                              Icons.check_circle,
-                                              color: Colors.green,
-                                              size: 16,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      
-                      */
-
-                              return InkWell(
+                            return InkWell(
                                 onTap: () {
                                   sendDataToExpertDetailsPage(
                                       _subCatModle.userProfileId.toString());
@@ -631,13 +425,30 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                 // color: Colors.blue,
                                                 color: ConstantData.whiteColor,
                                                 width: 1.0),
-                                            image: DecorationImage(
+                                           /* image: DecorationImage(
                                                 image: AssetImage(
                                                     'assets/images/no-image.png'
                                                     /* ConstantData.assetsImagePath +
                                                 _subCatModle.image[0],*/
                                                     ),
-                                                fit: BoxFit.cover),
+                                                fit: BoxFit.cover),*/
+
+                                                 image: _subCatModle.userProfileImage ==
+                                                  '0'
+                                              ? DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/no-image.png'),
+                                                  fit: BoxFit.cover)
+                                              : DecorationImage(
+                                                  image: NetworkImage(Config
+                                                          .BASE_URL +
+                                                      '/public/uploads/user-profile/' +
+                                                      _subCatModle.userProfileId
+                                                          .toString() +
+                                                      '/' +
+                                                      _subCatModle
+                                                          .userProfileImage),
+                                                  fit: BoxFit.cover),
                                           ),
                                         ),
                                       ),
@@ -749,7 +560,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                                                 1.2)),
                                                     ConstantWidget
                                                         .getCustomText(
-                                                          _subCatModle.workName,
+                                                          _subCatModle.userType2Name,
                                                    
 
                                                       // colorOrange,

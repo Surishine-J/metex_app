@@ -14,6 +14,7 @@ import 'package:metex_app/pages/nav/test.dart';
 import 'package:metex_app/pages/nav/test2.dart';
 import 'package:metex_app/pages/nav/test3.dart';
 import 'package:metex_app/pages/nav/test4.dart';
+import 'package:metex_app/pages/nav/test_gridview.dart';
 import 'package:metex_app/pages/pages.dart';
 import 'package:metex_app/pages/register/register_page.dart';
 import 'package:metex_app/services/zone_services.dart';
@@ -72,9 +73,10 @@ class MyApp extends StatelessWidget {
       },*/
 
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
-     home: NavBeforeLoginPage(),
+   home: NavBeforeLoginPage(),
       // home: MyHomePage(),
      // home: CheckBoxListTileExample(),
+     //home: Test5(),
     );
   }
 }

@@ -554,9 +554,9 @@ class ExpertDetails {
     required this.zoneName,
     required this.userType2Id,
     required this.userType2Name,
-    required this.userProfileWorkUpId,
-    required this.workId,
-    required this.workName,
+    //required this.userProfileWorkUpId,
+    //required this.workId,
+   // required this.workName,
   });
   
    late final int userProfileId;
@@ -584,9 +584,9 @@ class ExpertDetails {
   late final String zoneName;
   late final String userType2Id;
   late final String userType2Name;
-  late final String userProfileWorkUpId;
-  late final String workId;
-  late final String workName;
+ // late final String userProfileWorkUpId;
+ // late final String workId;
+ // late final String workName;
 
   ExpertDetails.fromJson(Map<String, dynamic> json) {
     userProfileId = json['user_profile_id'];
@@ -614,9 +614,9 @@ class ExpertDetails {
     zoneName = json['zone_name'];
     userType2Id = json['user_type2_id'];
     userType2Name = json['user_type2_name'];
-    userProfileWorkUpId = json['user_profile_work_up_id'];
-    workId = json['work_id'];
-    workName = json['work_name'];
+   // userProfileWorkUpId = json['user_profile_work_up_id'];
+   // workId = json['work_id'];
+   // workName = json['work_name'];
   }
 
  /* factory ExpertDetails.fromJson(Map<String, dynamic> json) =>ExpertDetails(
@@ -679,9 +679,9 @@ class ExpertDetails {
     _data['zone_name'] = zoneName;
     _data['user_type2_id'] = userType2Id;
     _data['user_type2_name'] = userType2Name;
-    _data['user_profile_work_up_id'] = userProfileWorkUpId;
-    _data['work_id'] = workId;
-    _data['work_name'] = workName;
+   // _data['user_profile_work_up_id'] = userProfileWorkUpId;
+   // _data['work_id'] = workId;
+   // _data['work_name'] = workName;
     return _data;
   }
 }

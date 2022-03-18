@@ -160,7 +160,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
   }
  getDataExpertAll() async {
     var data = {
-      "user_id": null,
+      "user_id": widget.userId,
     };
     Uri url = Uri.parse(Config.BASE_URL + '/api/user/search/all'); //url on web
     var response = await http.post(
@@ -168,7 +168,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      // body: convert.jsonEncode(data)
+      body: convert.jsonEncode(data)
     );
     // print(data);
     // print(response.body);
@@ -210,18 +210,21 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
     }
   }
 
-  List<ExpertDetails>? checkFilter() {
+   List<ExpertDetails>? checkFilter() {
     if (selectedPos == 0) {
       return allExpertlist;
     }
     if (selectedPos == 1) {
-      return coachList;
+      return craftsmanExpertList;
     }
     if (selectedPos == 2) {
-      return trainerList;
+      return fruitExpertList;
     }
     if (selectedPos == 3) {
-      return consultantList;
+      return vegetableExpertList;
+    }
+    if (selectedPos == 4) {
+      return carbonExpertList;
     }
     return null;
   }
@@ -361,14 +364,14 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
   }
 
   sendDataToExpertDetailsPage(String user_profile_id) {
-    print('user_profile_id =======>' + user_profile_id);
+   
     setState(() {
       chooseExpertlist = allExpertlist
           .where(
               (element) => element.userProfileId == int.parse(user_profile_id))
           .toList();
 
-      print('chooseExpertlist ===== >' + chooseExpertlist.length.toString());
+    
 
       if (chooseExpertlist.length > 0) {
         Navigator.push(
@@ -1777,7 +1780,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                             child: Center(
                                                               child: ConstantWidget
                                                                   .getCustomText(
-                                                                    _subCatModleFavorite
+                                                                   "฿ "+  _subCatModleFavorite
                                                                             .userProfilePrice,
                                                               
 
@@ -2461,7 +2464,7 @@ class _HomeAfterLoginPageState extends State<HomeAfterLoginPage> {
                                                                 1.2)),
                                                     ConstantWidget
                                                         .getCustomText(
-                                                      _subCatModle.workName,
+                                                      _subCatModle.userType2Name,
                                                       ConstantData.textColor,
                                                       1,
                                                       TextAlign.start,

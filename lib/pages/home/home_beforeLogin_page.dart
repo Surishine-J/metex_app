@@ -1322,7 +1322,7 @@ class _HomeBeforeLoginPageState extends State<HomeBeforeLoginPage> {
                                                   ConstantWidget.getCustomText(
                                                     // _subCatModle.expertName
                                                     //"อาชีพ",
-                                                    _subCatModle.workName,
+                                                    _subCatModle.userType2Name,
 
                                                     // colorOrange,
                                                     // _subCatModle.userType2Name.toString(),

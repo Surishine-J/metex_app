@@ -183,6 +183,7 @@ class _ExpertEditProfilePageState extends State<ExpertEditProfilePage> {
   saveExpertProfile() async {
     //print(displayNameController.value);
     var data = {
+      "user_id":userprofileList[0].userProfileUserId,
       "user_profile_id": userprofileList[0].userProfileId,
       "user_profile_name": displayNameController.value.text.isEmpty ||
               displayNameController.value.text.trim().toString() == ""

@@ -106,8 +106,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 convert.jsonDecode(response.body));
         setState(() {
           userprofileList = userprofile.data;
-          print("======> " + userprofileList.length.toString());
-          print(userprofileList[0].userProfileGender);
+         
         });
       } else {}
     } catch (e) {
@@ -133,7 +132,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
       print(response.statusCode);
       if (response.statusCode == 200) {
-        print(response.body);
+       
 
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('สร้างกลุ่มสำเร็จ')));

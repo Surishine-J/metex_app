@@ -808,7 +808,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                 1.2)),
                                                     ConstantWidget
                                                         .getCustomText(
-                                                          _subCatModleFavorite.workName,
+                                                          _subCatModleFavorite.userType2Name,
                                                     
 
                                                       // colorOrange,
